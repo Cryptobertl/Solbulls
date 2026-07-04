@@ -177,17 +177,18 @@ Cloudflare Workers) can be added without re-architecting.
 > destroy tokens. Supply of the token shrinks with every mint; the NFT's floor has an implicit
 > cost basis in burned tokens.
 
-### 5.2 Collection parameters (proposed — to be ratified with the community)
+### 5.2 Collection parameters (✅ ratified by owner, 2026-07-04)
 
-| Parameter | Proposal | Rationale |
+| Parameter | Decision | Rationale |
 |---|---|---|
-| Collection size | 2,222 SolBulls | Small enough to sell out, large enough for a community. |
-| Burn price | Fixed amount of $SOLBULLS per mint, targeting ~0.1–0.3 SOL equivalent at launch pricing | Set once at launch from a 7-day TWAP; a fixed token amount (not USD-pegged) keeps the mechanic simple and fully on-chain. |
-| Per-wallet limit | 10 (guard-enforced) | Anti-bot, wider distribution. |
+| Collection size | **2,222 SolBulls** | Small enough to sell out, large enough for a community. ⚠️ The art master guide graphic currently says "888 NFTs" — the guide is to be updated to 2,222. |
+| Burn price | Fixed amount of $SOLBULLS per mint, **targeting ~0.1 SOL equivalent** at launch pricing | Set once at launch from a 7-day TWAP; a fixed token amount (not USD-pegged) keeps the mechanic simple and fully on-chain. |
+| Per-wallet limit | **10** (guard-enforced) | Anti-bot, wider distribution. |
+| Allowlist phase | **Yes** — $SOLBULLS holders pre-mint the pool containing the **100 rarest bulls** (incl. the legendary 1/1s); snapshot criteria announced in the X community pre-launch | Rewards holders; implemented as a separate Candy Machine guard group (`allowList` Merkle root) over a reserved item range. |
 | Royalties | 5%, enforced via Metaplex Core royalty plugin | Funds ongoing development. |
 | Standard | **Metaplex Core** assets | Cheapest mint cost for users, modern standard, plugin support (royalties, freeze, attributes). |
 | Metadata & art storage | Arweave via **Irys** | Permanent, one-time cost, industry default. |
-| Traits | Generative: background (gradient variants), hide color, horns, eyes, outfit, accessory, 1/1 legendaries | Honors the logo; legendaries reference the 2021 Gang lore. |
+| Art direction | **64×64 layer-based pixel art** per the *Bull Society Master Guide* (`assets/img/bull-society-master-guide.jpeg`): bodies 15+, horns 20+, eyes 35+, mouths 20+, hats 35+, clothes 30+, chains 15+, backgrounds 30+; trait stacking order defined; **10 hand-crafted legendary 1/1s** (Samurai, Pharaoh, Cyber, King, Demon, Astronaut, Wall Street, Pirate, Alien, God Bull) | Owner-provided guide; honors the original logo (the white bull is the base head). |
 | Reveal | Instant reveal (no delayed reveal) | Simpler, no reveal-trust issues; randomness via Candy Machine's built-in item shuffling (`hiddenSettings` not needed). |
 
 ### 5.3 Implementation options for burn-to-mint
@@ -313,8 +314,9 @@ Estimates assume ~1 developer + 1 artist part-time; calendar time, not effort.
 | GitHub Pages | Free | Zero cost, same org as repo | Static-only export; no image optimization, no preview envs, awkward for the dApp routes | Only for a temporary landing |
 | Fleek / IPFS + Arweave mirror | ~Free | Decentralized, censorship-resistant — on-brand for crypto | Slower iteration; DNS quirks | Nice as a **mirror** of the mint page, not primary |
 
-**Recommendation:** Vercel as primary, plus an IPFS mirror of the /mint page once the mint is
-live (common practice so the mint survives any hosting/domain issue). Final call in Phase 0.
+**✅ Decision (2026-07-04): Vercel** — the owner has an account; connect this GitHub repo with
+root directory `apps/web`. An IPFS mirror of the /mint page can be added once the mint is live
+(common practice so the mint survives any hosting/domain issue).
 
 ---
 
@@ -352,13 +354,19 @@ live (common practice so the mint survives any hosting/domain issue). Final call
 1. ~~**Token mint address**~~ ✅ Provided by owner: `6REF5qj5FBXj1V6TUHAgnQ3zaje2uTvAwYqs8b4Npump`
    — pinned in [`docs/TOKEN.md`](TOKEN.md) with a remaining on-chain verification checklist
    (supply/decimals/authorities + pair cross-check).
-2. Who controls the **solbulls.xyz domain** and current site — DNS access needed for cutover.
+2. Who controls the **solbulls.xyz domain** and current site — DNS access needed for cutover
+   (owner has a Vercel account; domain must be pointed at the Vercel project).
 3. Relationship to the original **SolBulls Gang** team/community (solbulls.art, @SolanaBullsNFT,
-   Discord) — collaboration, blessing, or clean-break lore?
-4. Collection size and burn price — final numbers via community vote.
-5. Artist: commission externally or in-house? Style: pixel (like the logo) vs. illustrated?
-6. Allowlist criteria for an OG phase (token holders above X? original NFT holders?).
-7. Hosting decision (§8) and who owns the Vercel/Cloudflare account.
+   Discord) — collaboration, blessing, or clean-break lore? Official community hub is now the
+   [X community](https://x.com/i/communities/2027457477978272111).
+4. ~~Collection size and burn price~~ ✅ 2,222 bulls; burn ≈ 0.1 SOL worth of $SOLBULLS per mint
+   (exact token amount fixed from 7-day TWAP at launch). Art guide graphic still says 888 —
+   update it to 2,222.
+5. ~~Artist / style~~ ✅ 64×64 pixel art per the owner-provided *Bull Society Master Guide*;
+   trait layers still need to be produced as individual PNG files from the guide.
+6. **Allowlist snapshot criteria** — ✅ holders-only phase for the 100 rarest bulls is decided;
+   still open: minimum $SOLBULLS balance and snapshot date.
+7. ~~Hosting~~ ✅ Vercel (owner's account), root directory `apps/web`.
 8. Multisig signers for mint authority.
 
 ---

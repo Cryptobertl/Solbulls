@@ -11,7 +11,7 @@
 <p align="center">
   <a href="https://solbulls.xyz/">Website</a> ·
   <a href="https://dexscreener.com/solana/h9pwrgrkpwpubmdve8doti94aauynwkzgzv76ujk3kcq">$SOLBULLS on DexScreener</a> ·
-  <a href="https://twitter.com/SolanaBullsNFT">Twitter/X</a> ·
+  <a href="https://x.com/i/communities/2027457477978272111">X Community</a> ·
   <a href="https://discord.com/invite/Quf39wHSjg">Discord</a>
 </p>
 
@@ -70,14 +70,31 @@ Solbulls/
 | RPC | Helius (or Triton/QuickNode) |
 | Hosting | **TBD** — Vercel recommended; see plan §8 |
 
+## Getting started
+
+```bash
+cd apps/web
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
+```
+
+**Deploy to Vercel:** import this GitHub repo in Vercel, set the project's *Root Directory* to
+`apps/web`, framework preset Next.js — no env vars needed for the site itself. Optional env
+vars once the mint goes live: `NEXT_PUBLIC_CANDY_MACHINE`, `NEXT_PUBLIC_CLUSTER`,
+`NEXT_PUBLIC_RPC_URL`.
+
 ## Status
 
 - [x] Proposal & project plan written
-- [ ] Phase 0 — brand & content inventory, token facts verified on-chain
-- [ ] Phase 1 — marketing website MVP live
-- [ ] Phase 2 — live $SOLBULLS token dashboard
-- [ ] Phase 3 — SolBull collection art + burn-to-mint on devnet
-- [ ] Phase 4 — mainnet mint launch
+- [x] Phase 0 — token CA pinned ([docs/TOKEN.md](docs/TOKEN.md)); parameters ratified
+      (2,222 bulls · burn ≈ 0.1 SOL worth per mint · max 10/wallet · holder allowlist for the
+      100 rarest · pixel art per the [Bull Society master guide](assets/img/bull-society-master-guide.jpeg) · Vercel hosting)
+- [x] Phase 1 — website built in `apps/web` (Home, Token, Mint, Collection, Roadmap, Lore, FAQ;
+      Phantom-first wallet connect; DexScreener live stats) — ready to deploy
+- [ ] Phase 2 — production domain cutover (solbulls.xyz → Vercel), on-chain burn counter
+- [ ] Phase 3 — trait layers produced + burn-to-mint Candy Machine on devnet (Phantom QA matrix)
+- [ ] Phase 4 — mainnet mint launch (allowlist → public)
 - [ ] Phase 5 — post-launch (gallery, staking, heritage game features)
 
 ## Token
