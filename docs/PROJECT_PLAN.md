@@ -1,0 +1,340 @@
+# SolBulls — Website & Burn-to-Mint NFT Collection: Proposal & Project Plan
+
+**Status:** Draft v1 · **Date:** 2026-07-04 · **Owner:** SolBulls team · **Hosting:** TBD (see §8)
+
+---
+
+## 1. Executive summary
+
+SolBulls has three assets today that live in separate places:
+
+1. **Heritage & brand.** *SolBulls Gang* has been listed in the official
+   [Solana ecosystem directory](https://github.com/solana-labs/ecosystem/blob/d71e170ea5250426ed51500411ea3ceb3dfff015/projects/solbulls.md)
+   since **2021-10-10** — "a gang of bulls living on #Solana. Breed and merge them to make yours
+   more powerful, then earn money in our play2earn game." The original ecosystem featured bull
+   NFTs, staking that produced DNA tokens, breeding/merging, and mining rewards.
+2. **A live token.** **$SOLBULLS** trades on Solana
+   ([DexScreener pair `H9pwRGrkPwpubmDVe8DoTi94aAUYnwKZGZv76ujK3KcQ`](https://dexscreener.com/solana/h9pwrgrkpwpubmdve8doti94aauynwkzgzv76ujk3kcq)).
+3. **A landing page.** [solbulls.xyz](https://solbulls.xyz/) — the current public face of the
+   token.
+
+This plan proposes **one full-fledged website** that absorbs the current solbulls.xyz content,
+revives the SolBulls Gang brand, and adds the flagship utility: **the SolBull NFT collection,
+minted exclusively by burning $SOLBULLS**. Every NFT minted permanently reduces token supply,
+creating a deflationary loop that ties the token and the collection together.
+
+The plan is phased so something shippable goes live early (a polished marketing site), with the
+on-chain mint following after devnet testing.
+
+---
+
+## 2. Background & existing assets
+
+| Asset | Where | Notes |
+|---|---|---|
+| Brand logo | [`img/solbulls.png`](https://github.com/solana-labs/ecosystem/blob/9e525b60b623b99dab6e204947212515ab80f158/img/solbulls.png) (copied to `assets/img/solbulls.png`) | White bull on a pink→purple→cyan→mint vaporwave gradient. This gradient becomes the design-system anchor (§5). |
+| Ecosystem listing | [`projects/solbulls.md`](https://github.com/solana-labs/ecosystem/blob/d71e170ea5250426ed51500411ea3ceb3dfff015/projects/solbulls.md) | Name "SolBulls Gang", category NFT, status Live, links to solbulls.art, Twitter [@SolanaBullsNFT](https://twitter.com/SolanaBullsNFT), [Discord](https://discord.com/invite/Quf39wHSjg). |
+| Heritage mechanics | solbulls.art (original dApp) | Bull staking → DNA tokens → breeding/merging; mining with chest rewards (~every 14 days). Not required for launch, but valuable lore + a Phase 5 candidate. |
+| Token | [DexScreener](https://dexscreener.com/solana/h9pwrgrkpwpubmdve8doti94aauynwkzgzv76ujk3kcq) | $SOLBULLS / SOL pair. ⚠️ The **token mint address, total supply, decimals, and authority status** (mint/freeze revoked?) must be read from the pair on-chain and pinned in this repo before any burn logic is written — see §11. |
+| Current site | [solbulls.xyz](https://solbulls.xyz/) | Content to be inventoried and migrated into the new site (copy, memes, CA, buy links, socials). |
+
+---
+
+## 3. Goals & success metrics
+
+**Goals**
+
+- G1 — Single canonical website: brand, token info, buy links, socials, and NFT mint in one place.
+- G2 — Give $SOLBULLS real utility via burn-to-mint; make total-burned a public, growing number.
+- G3 — Zero-custody, trust-minimized mint (users sign one transaction; no backend holds funds).
+- G4 — A site fast and polished enough to be shared as the first impression of the project.
+
+**Success metrics**
+
+- Website live on the production domain (solbulls.xyz or successor) with >90 Lighthouse scores.
+- Burn-to-mint live on mainnet; ≥ X% of supply burned in the first 90 days (X set at launch).
+- Sell-out or steady mint pace of the initial SolBull collection.
+- One canonical link used across Twitter/X, Telegram, Discord, and DexScreener listing.
+
+---
+
+## 4. Website proposal
+
+### 4.1 Sitemap
+
+```
+/                     Home — hero (bull + gradient), one-liner, CA copy button, buy links,
+│                     live price ticker, "Mint a SolBull" CTA, socials
+├── /token            $SOLBULLS dashboard — price, liquidity, mcap, holders, chart embed,
+│                     total burned counter, how-to-buy (Jupiter/Raydium links)
+├── /mint             Burn-to-mint dApp — connect wallet, shows $SOLBULLS balance,
+│                     burn amount, remaining supply, mint button, reveal
+├── /collection       SolBull gallery — minted NFTs, traits & rarity explorer,
+│                     links to Magic Eden / Tensor
+├── /roadmap          Phased roadmap (this plan, public version)
+├── /lore             Heritage page — SolBulls Gang story since 2021, old mechanics,
+│                     ecosystem-listing provenance (credibility signal)
+├── /faq              Token + mint FAQ, disclaimers, contract addresses
+└── (footer)          Terms/disclaimer, brand kit download, GitHub link
+```
+
+### 4.2 Key pages in detail
+
+**Home** — everything a first-time visitor needs above the fold: what SolBulls is, the contract
+address with a copy button, a Buy button (Jupiter swap link or embedded Jupiter Terminal widget),
+and the Mint CTA. Below: live stats strip (price / mcap / liquidity / **tokens burned**),
+collection preview, roadmap teaser, community links.
+
+**/token** — data pulled client-side from the free
+[DexScreener API](https://docs.dexscreener.com/) (`/latest/dex/pairs/solana/<pair>`), refreshed
+~every 60 s, plus an embedded DexScreener chart iframe. On-chain data (supply, burned amount)
+from RPC. Includes a prominent "how to buy" section for newcomers.
+
+**/mint** — the centerpiece. Flow:
+
+1. Connect wallet (Wallet Adapter: Phantom, Solflare, Backpack, WalletConnect).
+2. UI shows: user's $SOLBULLS balance, burn price per NFT, NFTs remaining, total burned so far.
+3. User clicks **Burn & Mint** → signs a single transaction that (a) burns the required
+   $SOLBULLS from their token account and (b) mints one SolBull NFT to their wallet.
+4. Reveal animation; NFT appears with traits; share-to-X button.
+
+Edge cases handled in UI: insufficient balance (deep-link to Jupiter to buy the difference),
+sold out, wallet on wrong network, RPC congestion (retry with priority fees).
+
+**/collection** — reads the collection via DAS API (Helius) and renders a paginated gallery with
+trait filters and a simple rarity score. Links each NFT to Magic Eden/Tensor.
+
+### 4.3 Design system
+
+Derived from the existing logo (white bull, vaporwave gradient):
+
+- **Palette:** hot pink `#FF6EC7` → purple `#B26EFF` → cyan `#3EC6FF` → mint `#4DFFB8` gradient
+  accents on a near-black background (`#0B0B12`); white/off-white text. (Exact stops to be
+  sampled from `assets/img/solbulls.png` during Phase 0.)
+- **Typography:** a bold display face for headlines (e.g., Clash Display / Space Grotesk) + Inter
+  for body. Slight retro/vaporwave flavor to match the logo, kept legible.
+- **Motif:** the bull. Hero uses a large upscaled/redrawn bull; section dividers use horn shapes;
+  the mint button gets the gradient treatment.
+- **Tone:** confident, meme-aware, but clean — credible enough for the /lore provenance story.
+- Dark theme only at launch (crypto-native default); light theme optional later.
+
+### 4.4 Tech stack
+
+| Concern | Choice | Why |
+|---|---|---|
+| Framework | **Next.js (App Router) + TypeScript** | Static marketing pages + dynamic dApp routes in one codebase; best hosting portability. |
+| Styling | Tailwind CSS + shadcn/ui | Fast iteration, consistent components. |
+| Wallets | `@solana/wallet-adapter` | Standard, supports all major wallets. |
+| Solana SDK | `@solana/web3.js` + Metaplex **Umi** | Umi is the current Metaplex client for Core/Candy Machine. |
+| Market data | DexScreener public API | Free, no key, already the canonical chart link. |
+| On-chain reads | Helius RPC + DAS API | Reliable mainnet RPC; DAS powers the gallery. |
+| Analytics | Plausible or Umami | Privacy-friendly, no cookie banner. |
+| CI | GitHub Actions | Lint, typecheck, build, preview deploys. |
+
+No backend/database is required for launch: the site is static + client-side chain reads. If a
+mint allowlist or burn-leaderboard is wanted later, a thin serverless layer (Vercel functions or
+Cloudflare Workers) can be added without re-architecting.
+
+---
+
+## 5. SolBull NFT collection — burn-to-mint design
+
+### 5.1 Concept
+
+> **Burn $SOLBULLS → mint a SolBull.** The only way to obtain a SolBull NFT at primary is to
+> destroy tokens. Supply of the token shrinks with every mint; the NFT's floor has an implicit
+> cost basis in burned tokens.
+
+### 5.2 Collection parameters (proposed — to be ratified with the community)
+
+| Parameter | Proposal | Rationale |
+|---|---|---|
+| Collection size | 2,222 SolBulls | Small enough to sell out, large enough for a community. |
+| Burn price | Fixed amount of $SOLBULLS per mint, targeting ~0.1–0.3 SOL equivalent at launch pricing | Set once at launch from a 7-day TWAP; a fixed token amount (not USD-pegged) keeps the mechanic simple and fully on-chain. |
+| Per-wallet limit | 10 (guard-enforced) | Anti-bot, wider distribution. |
+| Royalties | 5%, enforced via Metaplex Core royalty plugin | Funds ongoing development. |
+| Standard | **Metaplex Core** assets | Cheapest mint cost for users, modern standard, plugin support (royalties, freeze, attributes). |
+| Metadata & art storage | Arweave via **Irys** | Permanent, one-time cost, industry default. |
+| Traits | Generative: background (gradient variants), hide color, horns, eyes, outfit, accessory, 1/1 legendaries | Honors the logo; legendaries reference the 2021 Gang lore. |
+| Reveal | Instant reveal (no delayed reveal) | Simpler, no reveal-trust issues; randomness via Candy Machine's built-in item shuffling (`hiddenSettings` not needed). |
+
+### 5.3 Implementation options for burn-to-mint
+
+**Option A — Metaplex Core Candy Machine + `token burn` guard (recommended).**
+Candy Machine v3 / Core Candy Machine ships a first-party **`tokenBurn` guard**: the mint
+transaction requires the payer to burn a configured amount of a given SPL mint. This is exactly
+our mechanic, with **no custom program to write or audit**.
+
+- Guards to enable: `tokenBurn` ($SOLBULLS amount), `mintLimit` (10/wallet), `botTax`
+  (small SOL penalty for invalid mints), `startDate`, optionally `allowList` (Merkle root) for an
+  OG/holder pre-phase.
+- Effort: configuration + art pipeline only. Battle-tested by hundreds of collections.
+- Constraint: burn amount is fixed per guard group (can differ between allowlist/public groups —
+  e.g., cheaper burn for OG holders).
+
+**Option B — custom Anchor program.**
+Needed only if we want dynamic pricing (e.g., bonding-curve burn price), burning into a
+"furnace" stats PDA, or burn-for-upgrade mechanics later. Costs: development + **security
+audit** + more launch risk.
+
+**Decision: ship Option A for launch.** Revisit B in Phase 5 if breeding/upgrade mechanics
+return (a burn-to-upgrade program would echo the original DNA/merge lore).
+
+### 5.4 Deflationary flywheel & transparency
+
+- Fully-minted collection burns `2,222 × burn-price` tokens — publish this number pre-launch.
+- The site's **"Total $SOLBULLS burned"** counter reads burn events on-chain (token supply delta
+  of the mint) — verifiable by anyone, not a number we assert.
+- Post-launch: royalties (or a % of any team funds) can fund periodic buy-and-burn, feeding the
+  same counter.
+
+### 5.5 Art & metadata pipeline (`packages/nft`)
+
+1. Trait layers drawn at 2048×2048 (commissioned or in-house), layered PSD/PNG.
+2. Generation via HashLips-style script or `@metaplex-foundation` tooling; rarity table checked
+   into the repo for transparency.
+3. Assets + JSON uploaded to Arweave via Irys; manifest committed.
+4. Candy Machine created & loaded via **Sugar** CLI or an Umi script; config committed
+   (`config.json`), addresses recorded in `docs/DEPLOYMENTS.md`.
+5. Full dry-run on **devnet** with a mock $SOLBULLS mint before any mainnet step.
+
+---
+
+## 6. Architecture
+
+```
+┌────────────────────────────  Browser  ────────────────────────────┐
+│  Next.js app (static + client components)                         │
+│  ├── Wallet Adapter ── signs burn+mint tx ──► Solana mainnet      │
+│  │                                            ├─ SPL Token: burn  │
+│  │                                            └─ Core Candy       │
+│  │                                               Machine + guards │
+│  ├── DexScreener API ◄── price/liquidity/mcap (60s polling)       │
+│  └── Helius RPC/DAS ◄── supply, burned total, collection gallery  │
+└───────────────────────────────────────────────────────────────────┘
+        ▲
+        │  static deploy (CI on push to main)
+   Hosting (TBD, §8) — no server-side secrets; RPC key domain-restricted
+```
+
+Security properties: no backend custody, no private keys in the repo or CI, mint authority kept
+on a hardware wallet, Candy Machine authority optionally moved to a multisig (Squads) before
+public mint.
+
+---
+
+## 7. Phases, deliverables & timeline
+
+Estimates assume ~1 developer + 1 artist part-time; calendar time, not effort.
+
+### Phase 0 — Discovery & foundations (Week 1)
+- Inventory solbulls.xyz content; collect all official links, CA, memes, copy.
+- **Verify token facts on-chain** (mint address from the DexScreener pair, supply, decimals,
+  mint/freeze authority status) and pin them in `docs/TOKEN.md`.
+- Sample exact brand colors from the logo; assemble mini brand kit (`assets/`).
+- Decide hosting (§8) and domain strategy (keep solbulls.xyz as primary).
+- **Deliverable:** `docs/TOKEN.md`, brand kit, hosting decision, content doc.
+
+### Phase 1 — Marketing website MVP (Weeks 2–3)
+- Scaffold `apps/web` (Next.js + Tailwind + CI + preview deploys).
+- Build Home, /roadmap, /lore, /faq with final design system.
+- Launch on production domain; set up analytics and OG/social cards.
+- **Deliverable:** new solbulls.xyz live (replaces current landing page).
+
+### Phase 2 — Token dashboard (Week 4)
+- /token page: DexScreener API integration, chart embed, how-to-buy, CA copy, Jupiter link.
+- Live burned-supply counter (reads token supply vs. initial supply).
+- **Deliverable:** /token live; site becomes the canonical link on socials + DexScreener.
+
+### Phase 3 — Collection & devnet mint (Weeks 5–8)
+- Art: trait design → generation → community preview of sample bulls.
+- Upload assets to Arweave (Irys); create Core Candy Machine + guards on **devnet** with a mock
+  token; build /mint and /collection pages against devnet.
+- Community test mint; fix UX; agree final burn price & schedule via community vote.
+- **Deliverable:** working end-to-end burn-to-mint on devnet; published mint terms.
+
+### Phase 4 — Mainnet launch (Week 9)
+- Deploy Candy Machine to mainnet; authorities to hardware wallet/multisig; verify collection.
+- Optional OG allowlist phase (24 h) → public phase.
+- Launch comms: X thread, Discord/Telegram events, DexScreener/Birdeye profile updates.
+- **Deliverable:** SolBull mint live; burned counter climbing.
+
+### Phase 5 — Post-launch (Weeks 10+)
+- Rarity explorer polish, holder verification (Discord roles via Matrica or similar).
+- Buy-and-burn from royalties; leaderboard of top burners.
+- Explore heritage revival: staking, burn-to-merge/upgrade (custom program, audited — Option B),
+  echoing the original DNA/breeding mechanics.
+- **Deliverable:** roadmap v2 shaped with the community.
+
+---
+
+## 8. Hosting options (decision TBD — Phase 0)
+
+| Option | Cost | Pros | Cons | Fit |
+|---|---|---|---|---|
+| **Vercel** (recommended) | Free tier → ~$20/mo | First-class Next.js, preview deploys per PR, edge network, easy env vars | Vendor lock-in mild | ✅ Best DX for this stack |
+| Cloudflare Pages | Free tier generous | Fast edge, Workers if a thin API is needed later, great DDoS posture | Next.js support via adapter, slightly more setup | ✅ Strong alternative |
+| Netlify | Free tier | Simple, mature | Weaker Next.js App Router story than Vercel | OK |
+| GitHub Pages | Free | Zero cost, same org as repo | Static-only export; no image optimization, no preview envs, awkward for the dApp routes | Only for a temporary landing |
+| Fleek / IPFS + Arweave mirror | ~Free | Decentralized, censorship-resistant — on-brand for crypto | Slower iteration; DNS quirks | Nice as a **mirror** of the mint page, not primary |
+
+**Recommendation:** Vercel as primary, plus an IPFS mirror of the /mint page once the mint is
+live (common practice so the mint survives any hosting/domain issue). Final call in Phase 0.
+
+---
+
+## 9. Cost estimate (order of magnitude)
+
+| Item | Est. |
+|---|---|
+| Art (traits + 1/1s, commissioned) | $500–2,500 depending on artist |
+| Arweave storage via Irys (2,222 images + JSON) | ~$20–80 |
+| Candy Machine deploy + rent | < 2 SOL |
+| Helius RPC (developer plan) | $0–49/mo |
+| Hosting | $0–20/mo |
+| Domain renewals | ~$15/yr |
+| Custom program audit (only if Option B later) | $5k+ — avoided at launch by Option A |
+
+---
+
+## 10. Risks & mitigations
+
+| Risk | Mitigation |
+|---|---|
+| Wrong token targeted by burn guard | Phase 0 on-chain verification of the mint address; address pinned in repo and cross-checked in CI against the frontend constant. |
+| Mint bots / snipers | `botTax` + `mintLimit` guards; optional allowlist phase. |
+| Token price volatility vs. fixed burn price | Set price from 7-day TWAP shortly before launch; guards allow updating the burn amount if the community votes to re-price. |
+| Fake sites / scam clones during mint | Publish the only official URL everywhere in advance; show the Candy Machine address on-site; register lookalike domains if cheap. |
+| Metadata impermanence | Arweave (permanent) rather than centralized storage. |
+| Authority compromise | Hardware wallet + Squads multisig for CM/collection authority; no keys in CI. |
+| Regulatory/optics | Clear disclaimers (no financial advice, NFTs are collectibles, burns irreversible); no yield promises in copy. |
+| Heritage-brand confusion (solbulls.art vs .xyz) | /lore page tells the story explicitly; coordinate with original community channels where possible. |
+
+---
+
+## 11. Open questions (need answers before/during Phase 0)
+
+1. **Token mint address** — read from pair `H9pwRGrkPwpubmDVe8DoTi94aAUYnwKZGZv76ujK3KcQ` and
+   confirm supply/decimals/authorities. (Could not be verified from this environment; must be
+   pinned in `docs/TOKEN.md`.)
+2. Who controls the **solbulls.xyz domain** and current site — DNS access needed for cutover.
+3. Relationship to the original **SolBulls Gang** team/community (solbulls.art, @SolanaBullsNFT,
+   Discord) — collaboration, blessing, or clean-break lore?
+4. Collection size and burn price — final numbers via community vote.
+5. Artist: commission externally or in-house? Style: pixel (like the logo) vs. illustrated?
+6. Allowlist criteria for an OG phase (token holders above X? original NFT holders?).
+7. Hosting decision (§8) and who owns the Vercel/Cloudflare account.
+8. Multisig signers for mint authority.
+
+---
+
+## 12. References
+
+- Ecosystem listing: <https://github.com/solana-labs/ecosystem/blob/d71e170ea5250426ed51500411ea3ceb3dfff015/projects/solbulls.md>
+- Brand logo: <https://github.com/solana-labs/ecosystem/blob/9e525b60b623b99dab6e204947212515ab80f158/img/solbulls.png>
+- Current site: <https://solbulls.xyz/>
+- Token pair: <https://dexscreener.com/solana/h9pwrgrkpwpubmdve8doti94aauynwkzgzv76ujk3kcq>
+- Metaplex Core Candy Machine & guards (incl. `tokenBurn`): <https://developers.metaplex.com/core-candy-machine>
+- DexScreener API: <https://docs.dexscreener.com/>
+- Irys (Arweave uploads): <https://docs.irys.xyz/>
+- Solana Wallet Adapter: <https://github.com/anza-xyz/wallet-adapter>
