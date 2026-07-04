@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import { MINT_CONFIG, TOKEN, LINKS } from "@/lib/config";
+import { burnAndMint, type MintResult } from "@/lib/mint";
 import { WalletButton } from "./wallet-button";
 
 /**
@@ -17,8 +18,12 @@ import { WalletButton } from "./wallet-button";
  */
 export function MintPanel() {
   const { connection } = useConnection();
-  const { publicKey, connected } = useWallet();
+  const { publicKey, connected, wallet } = useWallet();
   const [balance, setBalance] = useState<number | null>(null);
+  const [minting, setMinting] = useState(false);
+  const [result, setResult] = useState<MintResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -46,9 +51,27 @@ export function MintPanel() {
     return () => {
       cancelled = true;
     };
-  }, [connection, publicKey]);
+  }, [connection, publicKey, refresh]);
 
-  const ready = Boolean(MINT_CONFIG.candyMachine && MINT_CONFIG.burnAmount);
+  const ready = Boolean(
+    MINT_CONFIG.candyMachine && MINT_CONFIG.collection && MINT_CONFIG.burnAmount,
+  );
+
+  async function onMint() {
+    if (!wallet) return;
+    setMinting(true);
+    setError(null);
+    setResult(null);
+    try {
+      const res = await burnAndMint(wallet.adapter);
+      setResult(res);
+      setRefresh((n) => n + 1); // re-read balance after the burn
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Mint failed — try again");
+    } finally {
+      setMinting(false);
+    }
+  }
 
   return (
     <div className="gradient-border p-6 sm:p-8 flex flex-col gap-6 max-w-xl">
@@ -80,9 +103,52 @@ export function MintPanel() {
       {!connected ? (
         <WalletButton />
       ) : ready ? (
-        <button className="gradient-bg text-ink font-bold rounded-full px-8 py-4 text-lg">
-          Burn &amp; Mint 🔥🐂
-        </button>
+        <div className="flex flex-col gap-3">
+          <button
+            onClick={onMint}
+            disabled={
+              minting ||
+              (balance != null &&
+                MINT_CONFIG.burnAmount != null &&
+                balance < MINT_CONFIG.burnAmount)
+            }
+            className="gradient-bg text-ink font-bold rounded-full px-8 py-4 text-lg disabled:opacity-50"
+          >
+            {minting ? "Confirm in your wallet…" : "Burn & Mint 🔥🐂"}
+          </button>
+          {balance != null &&
+            MINT_CONFIG.burnAmount != null &&
+            balance < MINT_CONFIG.burnAmount && (
+              <p className="text-sm text-zinc-400">
+                You need {MINT_CONFIG.burnAmount.toLocaleString()}{" "}
+                {TOKEN.ticker} —{" "}
+                <a href={LINKS.jupiter} className="underline">
+                  top up on Jupiter
+                </a>
+                .
+              </p>
+            )}
+          {result && (
+            <div className="rounded-xl bg-ink px-4 py-3 text-sm">
+              <p className="font-bold gradient-text">
+                Welcome to the herd! 🐂🔥
+              </p>
+              <p className="text-zinc-300 break-all">
+                Your SolBull:{" "}
+                <a
+                  href={`https://explorer.solana.com/address/${result.asset}${MINT_CONFIG.cluster === "devnet" ? "?cluster=devnet" : ""}`}
+                  className="underline"
+                >
+                  {result.asset}
+                </a>{" "}
+                — check the Collectibles tab in Phantom.
+              </p>
+            </div>
+          )}
+          {error && (
+            <p className="text-sm text-red-400 break-all">{error}</p>
+          )}
+        </div>
       ) : (
         <div className="rounded-xl bg-ink px-4 py-3 text-sm text-zinc-300">
           <p className="font-bold gradient-text mb-1">Mint not live yet</p>

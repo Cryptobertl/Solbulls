@@ -1,0 +1,4 @@
+node_modules/
+deploy.config.json
+allowlist.txt
+*.json.bak

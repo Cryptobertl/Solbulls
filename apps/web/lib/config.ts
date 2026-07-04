@@ -8,8 +8,14 @@
 export const TOKEN = {
   ticker: "$SOLBULLS",
   name: "SolBulls",
-  /** Token mint address (CA) — pinned in docs/TOKEN.md */
-  mint: "6REF5qj5FBXj1V6TUHAgnQ3zaje2uTvAwYqs8b4Npump",
+  /**
+   * Token mint address (CA) — pinned in docs/TOKEN.md.
+   * NEXT_PUBLIC_TOKEN_MINT overrides it ONLY for devnet testing with the
+   * mock token (see docs/DEVNET_RUNBOOK.md).
+   */
+  mint:
+    process.env.NEXT_PUBLIC_TOKEN_MINT ??
+    "6REF5qj5FBXj1V6TUHAgnQ3zaje2uTvAwYqs8b4Npump",
   /** Raydium/DEX pair tracked on DexScreener */
   pair: "H9pwRGrkPwpubmDVe8DoTi94aAUYnwKZGZv76ujK3KcQ",
   decimals: 6,
@@ -40,15 +46,20 @@ export const MINT_CONFIG = {
    * before launch (see docs/PROJECT_PLAN.md §5.2) and must match the
    * deployed Candy Machine tokenBurn guard exactly.
    */
-  burnAmount: null as number | null,
+  burnAmount: process.env.NEXT_PUBLIC_BURN_AMOUNT
+    ? Number(process.env.NEXT_PUBLIC_BURN_AMOUNT)
+    : null,
   burnTargetSol: 0.1,
   perWalletLimit: 10,
   /**
-   * Core Candy Machine address. Empty until the devnet/mainnet deployment
-   * (Phase 3/4). While empty, the mint page runs in "preview" mode:
-   * wallet connect + balance display work, the mint button is disabled.
+   * Core Candy Machine addresses. Empty until the devnet/mainnet
+   * deployment (Phase 3/4) — see docs/DEVNET_RUNBOOK.md. While empty,
+   * the mint page runs in "preview" mode: wallet connect + balance
+   * display work, the mint button is disabled.
    */
   candyMachine: process.env.NEXT_PUBLIC_CANDY_MACHINE ?? "",
+  candyMachineOg: process.env.NEXT_PUBLIC_CANDY_MACHINE_OG ?? "",
+  collection: process.env.NEXT_PUBLIC_COLLECTION ?? "",
   cluster: (process.env.NEXT_PUBLIC_CLUSTER ?? "devnet") as
     | "devnet"
     | "mainnet-beta",

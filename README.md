@@ -97,8 +97,14 @@ vars once the mint goes live: `NEXT_PUBLIC_CANDY_MACHINE`, `NEXT_PUBLIC_CLUSTER`
 - [x] Phase 2.5 — NFT generator built in `packages/nft` (weighted traits, seeded + reproducible,
       rarity ranking with Mythic/Epic/Rare/Common tiers, top-100 allowlist pool, Sugar-ready
       Metaplex output) — verified with a full 888 dry-run
-- [ ] Phase 3 — real trait-layer PNGs drawn per the master guide, then burn-to-mint Candy
-      Machine on devnet (Phantom QA matrix)
+- [x] Phase 2.6 — **all art drawn as code**: full trait-layer set + 10 legendary 1/1s
+      (`packages/nft/src/draw-layers.mjs`), full 888 collection generated and visually verified
+- [x] Phase 2.7 — devnet tooling ready (`packages/mint`: mock token, Arweave upload, Core
+      collection, OG+PUB candy machines with tokenBurn/allowlist/mintLimit/botTax guards,
+      CLI test mint) + real Burn & Mint transaction wired into /mint —
+      see [docs/DEVNET_RUNBOOK.md](docs/DEVNET_RUNBOOK.md)
+- [ ] Phase 3 — execute the devnet runbook (needs a machine with chain access), then the
+      [Phantom QA matrix](docs/PHANTOM_QA.md)
 - [ ] Phase 4 — mainnet mint launch (allowlist → public)
 - [ ] Phase 5 — post-launch (gallery, staking, heritage game features)
 

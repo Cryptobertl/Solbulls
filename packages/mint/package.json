@@ -1,0 +1,23 @@
+{
+  "name": "@solbulls/mint",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Devnet/mainnet deployment scripts: mock $SOLBULLS token, Core collection, burn-to-mint Candy Machines with guards",
+  "scripts": {
+    "wallet": "node src/wallet.mjs",
+    "mock-token": "node src/create-mock-token.mjs",
+    "upload": "node src/upload-assets.mjs",
+    "collection": "node src/create-collection.mjs",
+    "candy-machines": "node src/create-candy-machines.mjs",
+    "test-mint": "node src/test-mint.mjs"
+  },
+  "dependencies": {
+    "@metaplex-foundation/mpl-core": "^1.4.0",
+    "@metaplex-foundation/mpl-core-candy-machine": "^0.3.0",
+    "@metaplex-foundation/mpl-toolbox": "^0.10.0",
+    "@metaplex-foundation/umi": "^1.2.0",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.2.0",
+    "@metaplex-foundation/umi-uploader-irys": "^1.2.0"
+  }
+}
