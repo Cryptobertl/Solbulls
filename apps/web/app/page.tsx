@@ -27,16 +27,16 @@ export default function Home() {
           mint destroys supply forever. 🔥🐂
         </p>
         <CopyCA />
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex flex-col sm:flex-row w-full sm:w-auto px-2 sm:px-0 justify-center gap-4">
           <a
             href={LINKS.jupiter}
-            className="gradient-bg text-ink font-bold rounded-full px-8 py-3"
+            className="gradient-bg text-ink font-bold rounded-full px-8 py-4 sm:py-3 text-center"
           >
             Buy $SOLBULLS
           </a>
           <Link
             href="/mint"
-            className="gradient-border px-8 py-3 font-bold hover:opacity-90"
+            className="gradient-border px-8 py-4 sm:py-3 font-bold hover:opacity-90 text-center"
           >
             Mint a SolBull
           </Link>

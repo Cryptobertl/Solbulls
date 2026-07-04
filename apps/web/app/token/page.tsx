@@ -25,7 +25,7 @@ export default function TokenPage() {
         <iframe
           title="DexScreener chart"
           src={`https://dexscreener.com/solana/${TOKEN.pair}?embed=1&theme=dark&trades=0&info=0`}
-          className="w-full h-[500px] border-0"
+          className="w-full h-[380px] sm:h-[500px] border-0"
         />
       </section>
 

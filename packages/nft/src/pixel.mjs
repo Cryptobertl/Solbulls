@@ -1,10 +1,11 @@
 /**
- * Tiny pixel-art toolkit. Layers are authored at 32x32 and exported at
- * 64x64 (nearest-neighbor), matching traits.config.json `size: 64`.
+ * Tiny pixel-art toolkit. Layers are authored at 64x64 — the same pixel
+ * density as the original SolBulls logo bull — and exported 1:1,
+ * matching traits.config.json `size: 64`.
  */
 import sharp from "sharp";
 
-export const S = 32; // authoring grid
+export const S = 64; // authoring grid
 
 export function hex(c, a = 255) {
   const n = parseInt(c.slice(1), 16);
@@ -40,14 +41,14 @@ export class Layer {
   rect(x0, y0, x1, y1, rgba) {
     for (let y = y0; y <= y1; y++) this.hspan(x0, x1, y, rgba);
   }
-  // symmetric span: half-width hw around the 15|16 center line
+  // symmetric span: half-width hw around the 31|32 center line
   cspan(y, hw, rgba) {
-    this.hspan(16 - hw, 15 + hw, y, rgba);
+    this.hspan(32 - hw, 31 + hw, y, rgba);
   }
   // mirror a pixel op across the center line
   mpx(x, y, rgba) {
     this.px(x, y, rgba);
-    this.px(31 - x, y, rgba);
+    this.px(S - 1 - x, y, rgba);
   }
   ring(cx, cy, r0, r1, rgba) {
     for (let y = 0; y < S; y++)

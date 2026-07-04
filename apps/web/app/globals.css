@@ -1,26 +1,90 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #050506;
+  --color-ink-soft: #0d0d13;
+  --color-ink-line: #1b1b28;
+  --color-bull-pink: #ff6ec7;
+  --color-bull-purple: #b26eff;
+  --color-bull-cyan: #3ec6ff;
+  --color-bull-mint: #4dffb8;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  color: #f4f4fb;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gradient-text {
+  background: linear-gradient(
+    100deg,
+    var(--color-bull-pink),
+    var(--color-bull-purple),
+    var(--color-bull-cyan),
+    var(--color-bull-mint)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-bg {
+  background: linear-gradient(
+    100deg,
+    var(--color-bull-pink),
+    var(--color-bull-purple),
+    var(--color-bull-cyan)
+  );
+}
+
+.gradient-border {
+  position: relative;
+  background: var(--color-ink-soft);
+  border-radius: 1rem;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    120deg,
+    var(--color-bull-pink),
+    var(--color-bull-purple),
+    var(--color-bull-cyan),
+    var(--color-bull-mint)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Wallet-adapter UI restyled to match the theme */
+.wallet-adapter-button-trigger {
+  background: linear-gradient(
+    100deg,
+    var(--color-bull-pink),
+    var(--color-bull-purple),
+    var(--color-bull-cyan)
+  ) !important;
+  color: #050506 !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+}
+.wallet-adapter-modal-wrapper {
+  background: var(--color-ink-soft) !important;
+}
+.wallet-adapter-modal-list .wallet-adapter-button {
+  font-size: 16px;
 }
