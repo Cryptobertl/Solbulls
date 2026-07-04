@@ -229,8 +229,13 @@ for (const b of mintOrder) {
     continue;
   }
   const [base, ...rest] = stack;
-  await sharp(base)
+  // composite at native resolution FIRST — sharp would otherwise resize the
+  // base before compositing, leaving the overlays at the original size
+  const flat = await sharp(base)
     .composite(rest.map((input) => ({ input })))
+    .png()
+    .toBuffer();
+  await sharp(flat)
     .resize(C.size * C.outputScale, C.size * C.outputScale, {
       kernel: "nearest",
     })
