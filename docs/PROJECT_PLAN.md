@@ -349,9 +349,9 @@ live (common practice so the mint survives any hosting/domain issue). Final call
 
 ## 11. Open questions (need answers before/during Phase 0)
 
-1. **Token mint address** — read from pair `H9pwRGrkPwpubmDVe8DoTi94aAUYnwKZGZv76ujK3KcQ` and
-   confirm supply/decimals/authorities. (Could not be verified from this environment; must be
-   pinned in `docs/TOKEN.md`.)
+1. ~~**Token mint address**~~ ✅ Provided by owner: `6REF5qj5FBXj1V6TUHAgnQ3zaje2uTvAwYqs8b4Npump`
+   — pinned in [`docs/TOKEN.md`](TOKEN.md) with a remaining on-chain verification checklist
+   (supply/decimals/authorities + pair cross-check).
 2. Who controls the **solbulls.xyz domain** and current site — DNS access needed for cutover.
 3. Relationship to the original **SolBulls Gang** team/community (solbulls.art, @SolanaBullsNFT,
    Discord) — collaboration, blessing, or clean-break lore?

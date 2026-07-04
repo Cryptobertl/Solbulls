@@ -86,8 +86,9 @@ Solbulls/
 |---|---|
 | Ticker | **$SOLBULLS** |
 | Chain | Solana |
+| Token mint (CA) | [`6REF5qj5FBXj1V6TUHAgnQ3zaje2uTvAwYqs8b4Npump`](https://solscan.io/token/6REF5qj5FBXj1V6TUHAgnQ3zaje2uTvAwYqs8b4Npump) |
 | DexScreener pair | [`H9pwRGrkPwpubmDVe8DoTi94aAUYnwKZGZv76ujK3KcQ`](https://dexscreener.com/solana/h9pwrgrkpwpubmdve8doti94aauynwkzgzv76ujk3kcq) |
-| Token mint address | ⚠️ to be verified on-chain and pinned here (see plan §11) |
+| Details & verification | [docs/TOKEN.md](docs/TOKEN.md) |
 
 ## Disclaimer
 
