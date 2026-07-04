@@ -55,4 +55,20 @@ for (const id of ids) {
   }
 }
 saveConfig({ items });
+
+// collection image + metadata → collectionUri (used by create-collection)
+if (!cfg.collectionUri) {
+  const img = fs.readFileSync(path.join(ASSETS, "collection.png"));
+  const [imageUri] = await umi.uploader.upload([
+    createGenericFile(img, "collection.png", { contentType: "image/png" }),
+  ]);
+  const meta = JSON.parse(
+    fs.readFileSync(path.join(ASSETS, "collection.json"), "utf8"),
+  );
+  meta.image = imageUri;
+  meta.properties.files[0].uri = imageUri;
+  const collectionUri = await umi.uploader.uploadJson(meta);
+  saveConfig({ collectionUri });
+  console.log(`collectionUri: ${collectionUri}`);
+}
 console.log(`done: ${Object.keys(items).length}/${ids.length} items have URIs`);

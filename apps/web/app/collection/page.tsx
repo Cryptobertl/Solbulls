@@ -17,6 +17,15 @@ const LEGENDARIES = [
   "God Bull",
 ];
 
+const PREVIEWS: Array<{ file: string; label: string; tier: string }> = [
+  { file: "bull-710.png", label: "King Bull", tier: "Legendary 1/1" },
+  { file: "bull-411.png", label: "SolBull #411", tier: "Mythic" },
+  { file: "bull-290.png", label: "SolBull #290", tier: "Mythic" },
+  { file: "bull-653.png", label: "SolBull #653", tier: "Epic" },
+  { file: "bull-293.png", label: "SolBull #293", tier: "Rare" },
+  { file: "bull-169.png", label: "SolBull #169", tier: "Common" },
+];
+
 const TRAITS: Array<[string, string]> = [
   ["Bodies", "15+"],
   ["Horns", "20+"],
@@ -43,6 +52,29 @@ export default function CollectionPage() {
           starts.
         </p>
       </header>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="font-bold text-lg">
+          Meet the herd <span className="text-zinc-400 text-sm">(real generated bulls)</span>
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {PREVIEWS.map((p) => (
+            <figure key={p.file} className="gradient-border p-2 flex flex-col gap-2">
+              <Image
+                src={`/preview/${p.file}`}
+                alt={`${p.label} — ${p.tier} SolBull`}
+                width={256}
+                height={256}
+                className="rounded-lg w-full h-auto [image-rendering:pixelated]"
+              />
+              <figcaption className="text-xs px-1 pb-1">
+                <span className="block font-bold truncate">{p.label}</span>
+                <span className="gradient-text font-bold">{p.tier}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
 
       <section className="grid md:grid-cols-2 gap-8 items-start">
         <div className="gradient-border p-4">

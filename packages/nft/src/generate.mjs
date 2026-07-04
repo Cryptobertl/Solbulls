@@ -244,7 +244,16 @@ for (const b of mintOrder) {
   composed++;
 }
 
-// collection-level metadata (Metaplex collection NFT)
+// collection image (King Bull) + collection-level metadata
+if (sharp) {
+  const kingBull = path.join(LAYERS_DIR, "Legendaries", "King Bull.png");
+  if (fs.existsSync(kingBull)) {
+    await sharp(kingBull)
+      .resize(512, 512, { kernel: "nearest" })
+      .png()
+      .toFile(path.join(ASSETS, "collection.png"));
+  }
+}
 fs.writeFileSync(
   path.join(ASSETS, "collection.json"),
   JSON.stringify(
