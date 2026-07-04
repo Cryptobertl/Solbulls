@@ -31,7 +31,7 @@ export default function LorePage() {
         <p>
           <strong className="text-white">Now the bulls are back.</strong>{" "}
           $SOLBULLS runs on Solana as the herd&apos;s token, and the next
-          generation of bulls — 2,222 of them, drawn pixel by pixel — can
+          generation of bulls — 888 of them, drawn pixel by pixel — can
           only be summoned one way: by fire. Burn tokens, mint a bull. Every
           new member of the herd makes the token scarcer.
         </p>

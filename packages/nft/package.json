@@ -1,0 +1,15 @@
+{
+  "name": "@solbulls/nft",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "SolBull collection generator: weighted trait selection, 64x64 layer compositing, rarity scoring, Metaplex metadata output",
+  "scripts": {
+    "generate": "node src/generate.mjs",
+    "generate:dry": "node src/generate.mjs --dry-run",
+    "test:fixture": "node src/make-fixture-layers.mjs && node src/generate.mjs --config fixtures/traits.fixture.json --out out-fixture --supply 24"
+  },
+  "dependencies": {
+    "sharp": "^0.34.0"
+  }
+}

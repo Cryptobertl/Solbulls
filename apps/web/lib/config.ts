@@ -30,8 +30,8 @@ export const LINKS = {
 } as const;
 
 export const MINT_CONFIG = {
-  /** Total SolBull NFTs in the collection (decided 2026-07-04) */
-  collectionSize: 2222,
+  /** Total SolBull NFTs in the collection (decided 2026-07-04, matches the art master guide) */
+  collectionSize: 888,
   /** The 100 rarest bulls are reserved for a $SOLBULLS-holder allowlist phase */
   allowlistReserve: 100,
   /**

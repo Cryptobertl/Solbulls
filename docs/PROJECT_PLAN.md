@@ -181,7 +181,7 @@ Cloudflare Workers) can be added without re-architecting.
 
 | Parameter | Decision | Rationale |
 |---|---|---|
-| Collection size | **2,222 SolBulls** | Small enough to sell out, large enough for a community. ⚠️ The art master guide graphic currently says "888 NFTs" — the guide is to be updated to 2,222. |
+| Collection size | **888 SolBulls** | Matches the Bull Society master guide; 8 is a lucky number and the small supply keeps bulls scarce. (Updated from 2,222 by owner decision, 2026-07-04.) |
 | Burn price | Fixed amount of $SOLBULLS per mint, **targeting ~0.1 SOL equivalent** at launch pricing | Set once at launch from a 7-day TWAP; a fixed token amount (not USD-pegged) keeps the mechanic simple and fully on-chain. |
 | Per-wallet limit | **10** (guard-enforced) | Anti-bot, wider distribution. |
 | Allowlist phase | **Yes** — $SOLBULLS holders pre-mint the pool containing the **100 rarest bulls** (incl. the legendary 1/1s); snapshot criteria announced in the X community pre-launch | Rewards holders; implemented as a separate Candy Machine guard group (`allowList` Merkle root) over a reserved item range. |
@@ -215,21 +215,35 @@ return (a burn-to-upgrade program would echo the original DNA/merge lore).
 
 ### 5.4 Deflationary flywheel & transparency
 
-- Fully-minted collection burns `2,222 × burn-price` tokens — publish this number pre-launch.
+- Fully-minted collection burns `888 × burn-price` tokens — publish this number pre-launch.
 - The site's **"Total $SOLBULLS burned"** counter reads burn events on-chain (token supply delta
   of the mint) — verifiable by anyone, not a number we assert.
 - Post-launch: royalties (or a % of any team funds) can fund periodic buy-and-burn, feeding the
   same counter.
 
-### 5.5 Art & metadata pipeline (`packages/nft`)
+### 5.5 Art & metadata pipeline (`packages/nft`) — ✅ implemented
 
-1. Trait layers drawn at 2048×2048 (commissioned or in-house), layered PSD/PNG.
-2. Generation via HashLips-style script or `@metaplex-foundation` tooling; rarity table checked
-   into the repo for transparency.
-3. Assets + JSON uploaded to Arweave via Irys; manifest committed.
-4. Candy Machine created & loaded via **Sugar** CLI or an Umi script; config committed
-   (`config.json`), addresses recorded in `docs/DEPLOYMENTS.md`.
-5. Full dry-run on **devnet** with a mock $SOLBULLS mint before any mainnet step.
+The generator is built and tested (see [`packages/nft/README.md`](../packages/nft/README.md)):
+
+1. **Trait layers** — 64×64 transparent PNGs dropped into `layers/<Category>/<Trait>.png`,
+   matching `traits.config.json` (categories mirror the Bull Society guide: Background, Aura,
+   Body, Horns, Eyes, Mouth, Clothes, Chain, Hat + `layers/Legendaries/` for the ten 1/1s).
+   **This is the remaining manual step** — producing the real art files from the guide.
+2. **Weighted roll** — seeded RNG picks traits by configured weights (Common→Legendary spread),
+   rejects duplicate DNA and excluded combos. Same seed ⇒ same herd: reproducible and
+   community-auditable. Verified: 878 unique bulls roll cleanly from the starting config.
+3. **Rarity model** — statistical rarity score `Σ (supply / trait_count)` per bull
+   (rarity.tools formula), global ranking, tiers: ranks 1–10 *Legendary 1/1*, 11–100 *Mythic*,
+   top 25 % *Epic*, top 60 % *Rare*, rest *Common*. `Rarity Tier` is written into each NFT's
+   on-chain attributes so it shows in Phantom/marketplaces.
+4. **Allowlist pool** — the top 100 ranks (10 legendaries + 90 rarest generated) are exported
+   as token ids in `out/rarity-report.json`; Phase 3 loads exactly these items into the
+   allowlist guard group.
+5. **Anti-snipe shuffle** — mint order is seed-shuffled so token id ≠ rarity rank.
+6. **Output** — `out/assets/0.png 0.json … collection.json` in Sugar/Umi upload format
+   (Metaplex metadata standard, 2048×2048 nearest-neighbor upscale), plus `rarity-report.json`
+   and `rarity.csv`. Then: `sugar upload` → Arweave (Irys) → Candy Machine; addresses recorded
+   in `docs/DEPLOYMENTS.md`; full devnet dry-run with a mock $SOLBULLS mint before mainnet.
 
 ---
 
@@ -325,7 +339,7 @@ root directory `apps/web`. An IPFS mirror of the /mint page can be added once th
 | Item | Est. |
 |---|---|
 | Art (traits + 1/1s, commissioned) | $500–2,500 depending on artist |
-| Arweave storage via Irys (2,222 images + JSON) | ~$20–80 |
+| Arweave storage via Irys (888 images + JSON) | ~$20–80 |
 | Candy Machine deploy + rent | < 2 SOL |
 | Helius RPC (developer plan) | $0–49/mo |
 | Hosting | $0–20/mo |
@@ -359,9 +373,8 @@ root directory `apps/web`. An IPFS mirror of the /mint page can be added once th
 3. Relationship to the original **SolBulls Gang** team/community (solbulls.art, @SolanaBullsNFT,
    Discord) — collaboration, blessing, or clean-break lore? Official community hub is now the
    [X community](https://x.com/i/communities/2027457477978272111).
-4. ~~Collection size and burn price~~ ✅ 2,222 bulls; burn ≈ 0.1 SOL worth of $SOLBULLS per mint
-   (exact token amount fixed from 7-day TWAP at launch). Art guide graphic still says 888 —
-   update it to 2,222.
+4. ~~Collection size and burn price~~ ✅ 888 bulls; burn ≈ 0.1 SOL worth of $SOLBULLS per mint
+   (exact token amount fixed from 7-day TWAP at launch). Matches the art guide's "888 NFTs".
 5. ~~Artist / style~~ ✅ 64×64 pixel art per the owner-provided *Bull Society Master Guide*;
    trait layers still need to be produced as individual PNG files from the guide.
 6. **Allowlist snapshot criteria** — ✅ holders-only phase for the 100 rarest bulls is decided;

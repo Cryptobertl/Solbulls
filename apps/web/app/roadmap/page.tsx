@@ -31,7 +31,7 @@ const PHASES = [
     status: "upcoming",
     items: [
       "Holder allowlist mints the 100 rarest bulls",
-      "Public phase: 2,222 total, max 10 per wallet, bot tax",
+      "Public phase: 888 total, max 10 per wallet, bot tax",
       "Live burned-supply counter",
     ],
   },

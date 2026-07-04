@@ -52,9 +52,10 @@ Solbulls/
 ├── assets/
 │   └── img/                ← brand assets (logo, art, og-images)
 ├── apps/
-│   └── web/                ← Next.js website + mint dApp   (Phase 1+)
+│   └── web/                ← Next.js website + mint dApp          ✅ built
 ├── packages/
-│   └── nft/                ← collection config, art/metadata pipeline (Phase 3+)
+│   └── nft/                ← collection generator: traits config, rarity
+│                             engine, Metaplex metadata output      ✅ built
 └── programs/               ← only if a custom on-chain program is needed (see plan)
 ```
 
@@ -88,12 +89,16 @@ vars once the mint goes live: `NEXT_PUBLIC_CANDY_MACHINE`, `NEXT_PUBLIC_CLUSTER`
 
 - [x] Proposal & project plan written
 - [x] Phase 0 — token CA pinned ([docs/TOKEN.md](docs/TOKEN.md)); parameters ratified
-      (2,222 bulls · burn ≈ 0.1 SOL worth per mint · max 10/wallet · holder allowlist for the
+      (888 bulls · burn ≈ 0.1 SOL worth per mint · max 10/wallet · holder allowlist for the
       100 rarest · pixel art per the [Bull Society master guide](assets/img/bull-society-master-guide.jpeg) · Vercel hosting)
 - [x] Phase 1 — website built in `apps/web` (Home, Token, Mint, Collection, Roadmap, Lore, FAQ;
       Phantom-first wallet connect; DexScreener live stats) — ready to deploy
 - [ ] Phase 2 — production domain cutover (solbulls.xyz → Vercel), on-chain burn counter
-- [ ] Phase 3 — trait layers produced + burn-to-mint Candy Machine on devnet (Phantom QA matrix)
+- [x] Phase 2.5 — NFT generator built in `packages/nft` (weighted traits, seeded + reproducible,
+      rarity ranking with Mythic/Epic/Rare/Common tiers, top-100 allowlist pool, Sugar-ready
+      Metaplex output) — verified with a full 888 dry-run
+- [ ] Phase 3 — real trait-layer PNGs drawn per the master guide, then burn-to-mint Candy
+      Machine on devnet (Phantom QA matrix)
 - [ ] Phase 4 — mainnet mint launch (allowlist → public)
 - [ ] Phase 5 — post-launch (gallery, staking, heritage game features)
 
