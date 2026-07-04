@@ -35,9 +35,10 @@ burn-to-mint NFT design, architecture, roadmap, and hosting options.
    the SolBulls heritage (the original *SolBulls Gang* NFT project, listed in the
    [Solana ecosystem](https://github.com/solana-labs/ecosystem/blob/d71e170ea5250426ed51500411ea3ceb3dfff015/projects/solbulls.md)
    since October 2021) with the live **$SOLBULLS** token.
-2. **Burn-to-mint NFTs.** Holders burn a fixed amount of $SOLBULLS to mint a SolBull NFT.
-   Every mint permanently removes tokens from circulation — a deflationary flywheel that gives the
-   token real utility and the collection a real cost basis.
+2. **Burn-to-mint NFTs.** Holders connect Phantom and burn a fixed amount of $SOLBULLS to mint
+   a SolBull NFT — one signed transaction, working in the Phantom extension and inside Phantom's
+   mobile in-app browser. Every mint permanently removes tokens from circulation — a deflationary
+   flywheel that gives the token real utility and the collection a real cost basis.
 3. **Live token hub.** The site shows live price, liquidity, market cap and burn statistics
    (DexScreener API + on-chain data), so the community has one canonical place to point to.
 
@@ -62,7 +63,7 @@ Solbulls/
 | Layer | Choice |
 |---|---|
 | Frontend | Next.js (App Router) + TypeScript + Tailwind CSS |
-| Wallets | Solana Wallet Adapter (Phantom, Solflare, Backpack…) |
+| Wallets | **Phantom-first** (extension, in-app browser, deeplinks) via Solana Wallet Adapter; Solflare, Backpack… also supported |
 | NFT / mint | Metaplex Core + Candy Machine with **token-burn guard** |
 | Metadata storage | Arweave via Irys (permanent) |
 | Market data | DexScreener public API |

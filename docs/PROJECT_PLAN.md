@@ -90,9 +90,11 @@ collection preview, roadmap teaser, community links.
 ~every 60 s, plus an embedded DexScreener chart iframe. On-chain data (supply, burned amount)
 from RPC. Includes a prominent "how to buy" section for newcomers.
 
-**/mint** — the centerpiece. Flow:
+**/mint** — the centerpiece. **Phantom is the primary, first-class wallet** (see §4.3); other
+wallets are supported through the same adapter. Flow:
 
-1. Connect wallet (Wallet Adapter: Phantom, Solflare, Backpack, WalletConnect).
+1. Connect wallet — Phantom shown first in the connect modal; auto-detected when the site runs
+   inside Phantom's in-app browser (mobile) or when the extension is installed (desktop).
 2. UI shows: user's $SOLBULLS balance, burn price per NFT, NFTs remaining, total burned so far.
 3. User clicks **Burn & Mint** → signs a single transaction that (a) burns the required
    $SOLBULLS from their token account and (b) mints one SolBull NFT to their wallet.
@@ -104,7 +106,37 @@ sold out, wallet on wrong network, RPC congestion (retry with priority fees).
 **/collection** — reads the collection via DAS API (Helius) and renders a paginated gallery with
 trait filters and a simple rarity score. Links each NFT to Magic Eden/Tensor.
 
-### 4.3 Design system
+### 4.3 Phantom-first minting (hard requirement)
+
+Minting must work **inside Phantom via wallet connection** on every surface Phantom offers.
+Concretely, the burn+mint transaction is always built client-side and sent to the connected
+Phantom wallet for signing — no other signing path exists. The three Phantom surfaces:
+
+| Surface | How it works | What we must do |
+|---|---|---|
+| **Desktop — Phantom browser extension** | Standard `window.phantom.solana` provider via Solana Wallet Standard; Wallet Adapter picks it up automatically. | Phantom listed first in the connect modal; "detected" badge; one-click connect → burn+mint tx → Phantom approval popup shows the token burn and NFT mint clearly. |
+| **Mobile — Phantom in-app dApp browser** | User opens solbulls.xyz *inside* Phantom (Browser tab). The provider is injected exactly like the extension. | The site must be fully responsive and the mint flow completable end-to-end in this webview. Auto-connect prompt on /mint when the injected provider is present. This is the **primary mobile path** — most memecoin traffic is mobile Phantom users. |
+| **Mobile — external browser (Safari/Chrome)** | No injected provider. Use **Phantom deeplinks / universal links** (`https://phantom.app/ul/browse/<url>`) to bounce the user into Phantom's in-app browser, landing directly on /mint. | "Open in Phantom" button replaces "Connect" when we detect mobile + no provider. Android additionally gets Mobile Wallet Adapter (MWA) support, which Wallet Adapter provides out of the box. |
+
+Additional Phantom-specific work:
+
+- **Transaction preview quality:** Phantom simulates transactions and shows "you send / you
+  receive". We test that the approval screen shows *−N $SOLBULLS (burn)* and *+1 SolBull NFT* —
+  using the standard SPL burn instruction + Core Candy Machine mint keeps Phantom's simulation
+  legible. Anything that renders as a red "unknown interaction" warning is treated as a launch
+  blocker.
+- **Versioned transactions + priority fees** so mints confirm under congestion (Phantom supports
+  v0 transactions).
+- **Token & NFT visibility:** ensure $SOLBULLS token metadata and the collection's Core metadata
+  render correctly in Phantom's wallet UI (icon, name), and the minted SolBull appears in the
+  Collectibles tab immediately after confirmation.
+- **QA matrix (gate for Phase 4):** Phantom extension (Chrome/Brave/Firefox), Phantom iOS
+  in-app browser, Phantom Android in-app browser, Safari-iOS → deeplink handoff, Chrome-Android →
+  MWA/deeplink handoff. All five must complete a devnet burn+mint before mainnet.
+- **Optional (Phase 5):** publish the mint as a **Solana Action/Blink**, which Phantom can render
+  natively — minting from a link on X without visiting the site at all.
+
+### 4.4 Design system
 
 Derived from the existing logo (white bull, vaporwave gradient):
 
@@ -118,13 +150,13 @@ Derived from the existing logo (white bull, vaporwave gradient):
 - **Tone:** confident, meme-aware, but clean — credible enough for the /lore provenance story.
 - Dark theme only at launch (crypto-native default); light theme optional later.
 
-### 4.4 Tech stack
+### 4.5 Tech stack
 
 | Concern | Choice | Why |
 |---|---|---|
 | Framework | **Next.js (App Router) + TypeScript** | Static marketing pages + dynamic dApp routes in one codebase; best hosting portability. |
 | Styling | Tailwind CSS + shadcn/ui | Fast iteration, consistent components. |
-| Wallets | `@solana/wallet-adapter` | Standard, supports all major wallets. |
+| Wallets | `@solana/wallet-adapter` (Phantom-first) + Phantom deeplinks + Mobile Wallet Adapter | Phantom extension & in-app browser work via the injected provider; deeplinks/MWA cover mobile external browsers (§4.3). Other major wallets supported by the same adapter. |
 | Solana SDK | `@solana/web3.js` + Metaplex **Umi** | Umi is the current Metaplex client for Core/Candy Machine. |
 | Market data | DexScreener public API | Free, no key, already the canonical chart link. |
 | On-chain reads | Helius RPC + DAS API | Reliable mainnet RPC; DAS powers the gallery. |
@@ -251,7 +283,10 @@ Estimates assume ~1 developer + 1 artist part-time; calendar time, not effort.
 - Upload assets to Arweave (Irys); create Core Candy Machine + guards on **devnet** with a mock
   token; build /mint and /collection pages against devnet.
 - Community test mint; fix UX; agree final burn price & schedule via community vote.
-- **Deliverable:** working end-to-end burn-to-mint on devnet; published mint terms.
+- Run the full **Phantom QA matrix** (§4.3): extension, iOS/Android in-app browser, mobile
+  deeplink handoff — all five surfaces must complete a devnet burn+mint.
+- **Deliverable:** working end-to-end burn-to-mint on devnet, verified inside Phantom on desktop
+  and mobile; published mint terms.
 
 ### Phase 4 — Mainnet launch (Week 9)
 - Deploy Candy Machine to mainnet; authorities to hardware wallet/multisig; verify collection.
