@@ -6,6 +6,8 @@ export function SiteFooter() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 text-sm text-zinc-400 flex flex-col gap-4">
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           <a href={LINKS.community} className="hover:text-white">X Community</a>
+          <a href={LINKS.telegram} className="hover:text-white">Telegram News</a>
+          <a href={LINKS.telegramChat} className="hover:text-white">Telegram Chat</a>
           <a href={LINKS.dexscreener} className="hover:text-white">DexScreener</a>
           <a href={LINKS.solscan} className="hover:text-white">Solscan</a>
           <a href={LINKS.github} className="hover:text-white">GitHub</a>

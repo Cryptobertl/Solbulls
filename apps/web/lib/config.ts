@@ -27,6 +27,10 @@ export const LINKS = {
   jupiter: `https://jup.ag/swap/SOL-${TOKEN.mint}`,
   /** Official X (Twitter) community */
   community: "https://x.com/i/communities/2027457477978272111",
+  /** Telegram announcement channel */
+  telegram: "https://t.me/SolBullsFromSolanaGitHub",
+  /** Telegram community chat */
+  telegramChat: "https://t.me/+NLG5E0DKbQI1OTky",
   /** Heritage account from the 2021 SolBulls Gang era */
   twitter: "https://twitter.com/SolanaBullsNFT",
   github: "https://github.com/Cryptobertl/Solbulls",

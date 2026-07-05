@@ -118,7 +118,10 @@ export default function LorePage() {
         </p>
         <p>
           <strong className="text-white">Now the community is making it
-          happen.</strong> $SOLBULLS runs on Solana as the herd&apos;s token,
+          happen.</strong> SolBulls is a <strong className="text-white">CTO
+          — a full community takeover</strong>: no old team, just members of
+          the herd carrying the mission forward. $SOLBULLS runs on Solana as
+          the herd&apos;s token,
           and the next generation — 999 bulls in the first series, drawn on
           the original&apos;s exact 100×100 pixels — can only be summoned one
           way: by fire. Burn tokens, mint a bull. Every new member of the
@@ -126,13 +129,20 @@ export default function LorePage() {
         </p>
         <p>
           The original bull lives on in our logo and in the base head of
-          every new SolBull. Same horns. Same attitude. New cycle. 🐂
+          every new SolBull. Same horns. Same attitude. New cycle. Real
+          Solana bulls change their PFP to a bull. 🐂
         </p>
       </div>
 
-      <div className="flex gap-5 text-sm">
+      <div className="flex flex-wrap gap-5 text-sm">
         <a href={LINKS.community} className="underline">
           Join the X Community
+        </a>
+        <a href={LINKS.telegram} className="underline">
+          Telegram Announcements
+        </a>
+        <a href={LINKS.telegramChat} className="underline">
+          Telegram Chat
         </a>
       </div>
     </div>

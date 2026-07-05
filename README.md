@@ -12,7 +12,8 @@
   <a href="https://solbulls.xyz/">Website</a> ·
   <a href="https://dexscreener.com/solana/h9pwrgrkpwpubmdve8doti94aauynwkzgzv76ujk3kcq">$SOLBULLS on DexScreener</a> ·
   <a href="https://x.com/i/communities/2027457477978272111">X Community</a> ·
-  <a href="https://discord.com/invite/Quf39wHSjg">Discord</a>
+  <a href="https://t.me/SolBullsFromSolanaGitHub">Telegram News</a> ·
+  <a href="https://t.me/+NLG5E0DKbQI1OTky">Telegram Chat</a>
 </p>
 
 ---

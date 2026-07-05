@@ -38,6 +38,21 @@ const FAQS: Array<{ q: string; a: React.ReactNode }> = [
     a: "Phantom is first-class on every surface: browser extension, Phantom's mobile in-app browser, and deeplinks from mobile Safari/Chrome. Solflare, Backpack and other standard wallets also work.",
   },
   {
+    q: "Is this the original 2021 team?",
+    a: (
+      <span>
+        No — SolBulls is a <strong>CTO (community takeover)</strong>. The
+        original bull and its NFT mission were published in Solana Labs&apos;
+        ecosystem repo in October 2021 (see the{" "}
+        <a href="/lore" className="underline">
+          lore
+        </a>
+        ); the community picked the mission back up and is finishing it. Real
+        Solana bulls change their PFP to a bull. 🐂
+      </span>
+    ),
+  },
+  {
     q: "Is this financial advice?",
     a: `No. ${TOKEN.ticker} is a community meme token and SolBull NFTs are collectibles. Burns are irreversible. Never spend more than you can afford to lose.`,
   },

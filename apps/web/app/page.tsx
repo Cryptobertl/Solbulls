@@ -70,11 +70,22 @@ export default function Home() {
         ))}
       </section>
 
-      <section className="text-center flex flex-col items-center gap-3">
+      <section className="text-center flex flex-col items-center gap-4">
         <h2 className="text-2xl font-bold">Join the herd</h2>
+        <p className="max-w-xl text-zinc-300">
+          SolBulls is a <strong className="text-white">CTO</strong> — a full
+          community takeover. No old team, just the herd. Real Solana bulls
+          change their PFP to a bull. 🐂
+        </p>
         <div className="flex flex-wrap justify-center gap-5 text-zinc-300">
           <a href={LINKS.community} className="underline hover:text-white">
             X Community
+          </a>
+          <a href={LINKS.telegram} className="underline hover:text-white">
+            Telegram Announcements
+          </a>
+          <a href={LINKS.telegramChat} className="underline hover:text-white">
+            Telegram Chat
           </a>
           <a href={LINKS.dexscreener} className="underline hover:text-white">
             DexScreener
