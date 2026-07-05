@@ -64,7 +64,7 @@ export function GameCanvas({
   const spritesRef = useRef<Record<SpriteName, HTMLImageElement> | null>(null);
   const stateRef = useRef<GameState | null>(null);
   const inputsRef = useRef<InputEvent[]>([]);
-  const pendingRef = useRef({ left: false, right: false, jump: false });
+  const pendingRef = useRef({ left: false, right: false, jump: false, roll: false });
   const rafRef = useRef<number | null>(null);
   const accRef = useRef(0);
   const lastRef = useRef(0);
@@ -76,7 +76,7 @@ export function GameCanvas({
     });
   }, []);
 
-  const queue = useCallback((action: "left" | "right" | "jump") => {
+  const queue = useCallback((action: "left" | "right" | "jump" | "roll") => {
     if (stateRef.current && !stateRef.current.over) {
       pendingRef.current[action] = true;
     }
@@ -114,10 +114,15 @@ export function GameCanvas({
     const spawnY = -60;
     const size = Math.min(laneW * 0.8, 92);
 
+    const SPRITE_FOR: Record<string, SpriteName> = {
+      bull: "bull", bear: "bear", coin: "coin", barrier: "barrier", rock: "rock",
+      train: "barrier", gantry: "barrier", magnet: "coin", mult: "coin", shield: "coin",
+    };
     for (const e of s.entities) {
       if (e.hit) continue;
       const py = spawnY + (1 - e.y) * (playerY - spawnY);
-      const img = sprites[e.kind as SpriteName];
+      const img = sprites[SPRITE_FOR[e.kind] ?? "rock"];
+      if (!img) continue;
       const es = e.kind === "coin" ? size * 0.6 : size * 0.85;
       ctx.drawImage(img, laneX(e.lane) - es / 2, py - es / 2, es, es);
     }
@@ -156,8 +161,9 @@ export function GameCanvas({
         if (p.left) inputsRef.current.push({ tick: s.tick + 1, action: "left" });
         if (p.right) inputsRef.current.push({ tick: s.tick + 1, action: "right" });
         if (p.jump) inputsRef.current.push({ tick: s.tick + 1, action: "jump" });
+        if (p.roll) inputsRef.current.push({ tick: s.tick + 1, action: "roll" });
         step(s, p);
-        pendingRef.current = { left: false, right: false, jump: false };
+        pendingRef.current = { left: false, right: false, jump: false, roll: false };
         accRef.current -= stepDt;
         if (s.over) break;
       }
@@ -184,7 +190,7 @@ export function GameCanvas({
     const seed = (Math.floor(Math.random() * 0xffffffff) >>> 0) || 1;
     stateRef.current = createGame(seed);
     inputsRef.current = [];
-    pendingRef.current = { left: false, right: false, jump: false };
+    pendingRef.current = { left: false, right: false, jump: false, roll: false };
     accRef.current = 0;
     lastRef.current = performance.now();
     setPhase("playing");
@@ -219,6 +225,7 @@ export function GameCanvas({
       if (e.key === "ArrowLeft" || e.key === "a") queue("left");
       else if (e.key === "ArrowRight" || e.key === "d") queue("right");
       else if (e.key === "ArrowUp" || e.key === "w" || e.key === " ") queue("jump");
+      else if (e.key === "ArrowDown" || e.key === "s") queue("roll");
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -245,6 +252,7 @@ export function GameCanvas({
       }
       if (Math.abs(dx) > Math.abs(dy)) queue(dx > 0 ? "right" : "left");
       else if (dy < 0) queue("jump");
+      else queue("roll");
     };
     const onMove = () => {
       moved = true;
@@ -324,7 +332,7 @@ export function GameCanvas({
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-3 w-full max-w-[460px] sm:hidden">
+      <div className="grid grid-cols-4 gap-3 w-full max-w-[460px] sm:hidden">
         <button
           onClick={() => queue("left")}
           className="gradient-border py-4 font-bold text-xl"
@@ -338,6 +346,13 @@ export function GameCanvas({
           aria-label="Jump"
         >
           ⤒
+        </button>
+        <button
+          onClick={() => queue("roll")}
+          className="gradient-border py-4 font-bold text-xl"
+          aria-label="Roll"
+        >
+          ⤓
         </button>
         <button
           onClick={() => queue("right")}

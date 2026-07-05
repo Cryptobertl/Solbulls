@@ -9,7 +9,8 @@
     "generate:dry": "node src/generate.mjs --dry-run",
     "test:fixture": "node src/make-fixture-layers.mjs && node src/generate.mjs --config fixtures/traits.fixture.json --out out-fixture --supply 24",
     "draw": "node src/draw-layers.mjs",
-    "game-sprites": "node src/make-game-sprites.mjs"
+    "game-sprites": "node src/make-game-sprites.mjs",
+    "voxels": "node src/make-voxels.mjs"
   },
   "dependencies": {
     "sharp": "^0.34.0"
