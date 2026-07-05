@@ -87,9 +87,9 @@ export interface GameState {
 }
 
 const DT = 1 / TICK_HZ;
-const BASE_SPEED = 0.45;
+const BASE_SPEED = 0.28;
 const MAX_SPEED = 1.35;
-const SPEED_RAMP = 0.012;
+const SPEED_RAMP = 0.016;
 const GRAVITY = 5.2;
 const JUMP_V = 2.1;
 /** real apex = JUMP_V^2 / (2*GRAVITY) ≈ 0.424 */
@@ -119,7 +119,7 @@ export function createGame(seed: number): GameState {
     chaseGap: START_CHASE_GAP,
     over: false,
     entities: [],
-    nextSpawnTick: Math.round(0.9 * TICK_HZ),
+    nextSpawnTick: Math.round(1.3 * TICK_HZ),
     nextId: 1,
     lastLaneChangeTick: -999,
     prevClear: 1,
@@ -280,7 +280,7 @@ export function step(s: GameState, a: Actions): GameState {
 
   // spawn schedule
   if (s.tick >= s.nextSpawnTick) {
-    const gap = Math.max(0.55, 1.15 - (s.speed - BASE_SPEED) * 0.5);
+    const gap = Math.max(0.55, 1.3 - (s.speed - BASE_SPEED) * 0.55);
     spawnWave(s, gap);
     s.nextSpawnTick = s.tick + Math.round(gap * TICK_HZ);
   }
