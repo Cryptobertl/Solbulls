@@ -59,7 +59,7 @@ console.log(`bull bbox: x ${x0}-${x1}, y ${y0}-${y1} (${x1 - x0 + 1}x${y1 - y0 +
 
 // fit bbox into 64x64 (keep aspect, center horizontally, anchor bottom)
 const bw = x1 - x0 + 1, bh = y1 - y0 + 1;
-const S = 64;
+const S = 100;
 const scale = Math.min(S / bw, S / bh);
 const tw = Math.round(bw * scale), th = Math.round(bh * scale);
 const ox = Math.floor((S - tw) / 2), oy = S - th;

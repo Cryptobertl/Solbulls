@@ -23,7 +23,7 @@ const PHASES = [
     items: [
       "Core Candy Machine + tokenBurn guard on devnet",
       "Full Phantom test: extension, iOS & Android in-app browser, deeplinks",
-      "Final burn price fixed (~0.1 SOL worth, 7-day TWAP)",
+      "Final burn price fixed (~0.05 SOL worth, 7-day TWAP)",
     ],
   },
   {
@@ -31,7 +31,7 @@ const PHASES = [
     status: "upcoming",
     items: [
       "Holder allowlist mints the 100 rarest bulls",
-      "Public phase: 888 total, max 10 per wallet, bot tax",
+      "Public phase: 999 in Series 1, max 10 per wallet, bot tax",
       "Live burned-supply counter",
     ],
   },
@@ -41,6 +41,7 @@ const PHASES = [
     items: [
       "Rarity explorer & holder roles",
       "Buy-and-burn from royalties",
+      "Series 2: the herd grows toward the 2,222 max - at a higher burn price",
       "Heritage revival: staking, breeding & merging (2021 lore)",
     ],
   },

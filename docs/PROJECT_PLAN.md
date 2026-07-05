@@ -181,8 +181,8 @@ Cloudflare Workers) can be added without re-architecting.
 
 | Parameter | Decision | Rationale |
 |---|---|---|
-| Collection size | **888 SolBulls** | Matches the Bull Society master guide; 8 is a lucky number and the small supply keeps bulls scarce. (Updated from 2,222 by owner decision, 2026-07-04.) |
-| Burn price | Fixed amount of $SOLBULLS per mint, **targeting ~0.1 SOL equivalent** at launch pricing | Set once at launch from a 7-day TWAP; a fixed token amount (not USD-pegged) keeps the mechanic simple and fully on-chain. |
+| Collection size | **Series 1: 999 SolBulls**, expandable in later series up to a hard max of **2,222** (Series 2+ at a higher burn price - new candy machine, same collection) | Owner decision 2026-07-04; keeps Series 1 scarce while leaving room for the herd to grow. |
+| Burn price | Fixed amount of $SOLBULLS per mint, **targeting ~0.05 SOL equivalent** (Series 1; later series mint at a higher price) at launch pricing | Set once at launch from a 7-day TWAP; a fixed token amount (not USD-pegged) keeps the mechanic simple and fully on-chain. |
 | Per-wallet limit | **10** (guard-enforced) | Anti-bot, wider distribution. |
 | Allowlist phase | **Yes** — $SOLBULLS holders pre-mint the pool containing the **100 rarest bulls** (incl. the legendary 1/1s); snapshot criteria announced in the X community pre-launch | Rewards holders; implemented as a separate Candy Machine guard group (`allowList` Merkle root) over a reserved item range. |
 | Royalties | 5%, enforced via Metaplex Core royalty plugin | Funds ongoing development. |
@@ -215,7 +215,7 @@ return (a burn-to-upgrade program would echo the original DNA/merge lore).
 
 ### 5.4 Deflationary flywheel & transparency
 
-- Fully-minted collection burns `888 × burn-price` tokens — publish this number pre-launch.
+- Fully-minted collection burns `999 × burn-price` (Series 1) tokens — publish this number pre-launch.
 - The site's **"Total $SOLBULLS burned"** counter reads burn events on-chain (token supply delta
   of the mint) — verifiable by anyone, not a number we assert.
 - Post-launch: royalties (or a % of any team funds) can fund periodic buy-and-burn, feeding the
@@ -339,7 +339,7 @@ root directory `apps/web`. An IPFS mirror of the /mint page can be added once th
 | Item | Est. |
 |---|---|
 | Art (traits + 1/1s, commissioned) | $500–2,500 depending on artist |
-| Arweave storage via Irys (888 images + JSON) | ~$20–80 |
+| Arweave storage via Irys (999 images + JSON) | ~$20–80 |
 | Candy Machine deploy + rent | < 2 SOL |
 | Helius RPC (developer plan) | $0–49/mo |
 | Hosting | $0–20/mo |
@@ -373,7 +373,7 @@ root directory `apps/web`. An IPFS mirror of the /mint page can be added once th
 3. Relationship to the original **SolBulls Gang** team/community (solbulls.art, @SolanaBullsNFT,
    Discord) — collaboration, blessing, or clean-break lore? Official community hub is now the
    [X community](https://x.com/i/communities/2027457477978272111).
-4. ~~Collection size and burn price~~ ✅ 888 bulls; burn ≈ 0.1 SOL worth of $SOLBULLS per mint
+4. ~~Collection size and burn price~~ ✅ Series 1: 999 bulls (max 2,222 across series); burn ≈ 0.05 SOL worth of $SOLBULLS per mint
    (exact token amount fixed from 7-day TWAP at launch). Matches the art guide's "888 NFTs".
 5. ~~Artist / style~~ ✅ 64×64 pixel art per the owner-provided *Bull Society Master Guide*;
    trait layers still need to be produced as individual PNG files from the guide.

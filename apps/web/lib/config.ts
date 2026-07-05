@@ -36,12 +36,13 @@ export const LINKS = {
 } as const;
 
 export const MINT_CONFIG = {
-  /** Total SolBull NFTs in the collection (decided 2026-07-04, matches the art master guide) */
-  collectionSize: 888,
+  /** Series 1 supply (owner decision 2026-07-04); collection can grow to maxSupply in later series */
+  collectionSize: 999,
+  maxSupply: 2222,
   /** The 100 rarest bulls are reserved for a $SOLBULLS-holder allowlist phase */
   allowlistReserve: 100,
   /**
-   * $SOLBULLS burned per mint. Target value ≈ 0.1 SOL per mint (decided
+   * $SOLBULLS burned per mint. Target value ≈ 0.05 SOL per mint (Series 1; owner decision
    * 2026-07-04); the exact token amount is fixed from a 7-day TWAP right
    * before launch (see docs/PROJECT_PLAN.md §5.2) and must match the
    * deployed Candy Machine tokenBurn guard exactly.
@@ -49,7 +50,7 @@ export const MINT_CONFIG = {
   burnAmount: process.env.NEXT_PUBLIC_BURN_AMOUNT
     ? Number(process.env.NEXT_PUBLIC_BURN_AMOUNT)
     : null,
-  burnTargetSol: 0.1,
+  burnTargetSol: 0.05,
   perWalletLimit: 10,
   /**
    * Core Candy Machine addresses. Empty until the devnet/mainnet

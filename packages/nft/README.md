@@ -1,6 +1,6 @@
 # @solbulls/nft — collection generator
 
-Turns the **Bull Society Master Guide** trait layers into the 888-piece SolBull collection:
+Turns the **Bull Society Master Guide** trait layers into the SolBull collection (Series 1: 999 of a 2,222 max):
 composed images, Metaplex metadata, rarity ranking, and the holder-allowlist pool.
 
 ## How rarity works
@@ -8,7 +8,7 @@ composed images, Metaplex metadata, rarity ranking, and the holder-allowlist poo
 1. **Weights** — every trait in [`traits.config.json`](traits.config.json) has a relative
    `weight` within its category. Higher weight = more common. The weights encode the intended
    tiers (Common / Rare / Epic / Legendary trait labels are cosmetic; the numbers do the work).
-2. **Roll** — a seeded RNG (`collection.seed`) picks one trait per category for each of the 878
+2. **Roll** — a seeded RNG (`collection.seed`) picks one trait per category for each of the 989
    generated bulls, rejecting duplicates (DNA uniqueness) and combos that hit an exclusion rule.
    Same seed ⇒ identical herd, so the generation is reproducible and auditable by anyone.
 3. **Score** — after the roll, each bull gets a *statistical rarity* score:
@@ -63,5 +63,5 @@ makes the whole collection independently verifiable.
 - Trait counts in the config are a starting spread mirroring the master guide's categories
   (bodies, horns, eyes, mouths, hats, clothes, chains, backgrounds, auras). Rename/extend
   freely — the generator is fully config-driven.
-- The composer upscales 64×64 → 2048×2048 with nearest-neighbor (`outputScale: 32`), keeping
+- The composer upscales 100×100 → 2000×2000 with nearest-neighbor (`outputScale: 20`), keeping
   pixels crisp for marketplaces.

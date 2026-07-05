@@ -1,156 +1,507 @@
 {
-  "$comment": "SolBull generation config — Bull Society Master Guide. Weights are relative within a category; they do NOT need to sum to 100. rarityTier is cosmetic labelling for the metadata. Layer files live at layers/<Category>/<Trait name>.png (64x64, transparent). 'none' entries need no file.",
+  "$comment": "SolBull generation config \u2014 Bull Society Master Guide. Weights are relative within a category; they do NOT need to sum to 100. rarityTier is cosmetic labelling for the metadata. Layer files live at layers/<Category>/<Trait name>.png (64x64, transparent). 'none' entries need no file.",
   "collection": {
     "name": "SolBulls",
     "symbol": "BULL",
-    "description": "888 pixel bulls summoned by fire — minted only by burning $SOLBULLS on Solana.",
-    "supply": 888,
-    "size": 64,
-    "outputScale": 32,
+    "description": "Series 1: 999 pixel bulls summoned by fire \u2014 minted only by burning $SOLBULLS on Solana. The herd can grow to 2,222 max in later series.",
+    "supply": 999,
+    "size": 100,
+    "outputScale": 20,
     "seed": 888888,
     "sellerFeeBasisPoints": 500,
     "externalUrl": "https://solbulls.xyz",
     "allowlistPoolSize": 100
   },
   "legendaries": [
-    { "name": "Samurai Bull" },
-    { "name": "Pharaoh Bull" },
-    { "name": "Cyber Bull" },
-    { "name": "King Bull" },
-    { "name": "Demon Bull" },
-    { "name": "Astronaut Bull" },
-    { "name": "Wall Street Bull" },
-    { "name": "Pirate Bull" },
-    { "name": "Alien Bull" },
-    { "name": "God Bull" }
+    {
+      "name": "Samurai Bull"
+    },
+    {
+      "name": "Pharaoh Bull"
+    },
+    {
+      "name": "Cyber Bull"
+    },
+    {
+      "name": "King Bull"
+    },
+    {
+      "name": "Demon Bull"
+    },
+    {
+      "name": "Astronaut Bull"
+    },
+    {
+      "name": "Wall Street Bull"
+    },
+    {
+      "name": "Pirate Bull"
+    },
+    {
+      "name": "Alien Bull"
+    },
+    {
+      "name": "God Bull"
+    }
   ],
   "categories": [
     {
       "name": "Background",
       "traits": [
-        { "name": "Blue", "weight": 140, "rarityTier": "Common" },
-        { "name": "Purple", "weight": 140, "rarityTier": "Common" },
-        { "name": "Green", "weight": 130, "rarityTier": "Common" },
-        { "name": "Red", "weight": 120, "rarityTier": "Common" },
-        { "name": "Yellow", "weight": 110, "rarityTier": "Common" },
-        { "name": "Galaxy", "weight": 55, "rarityTier": "Rare" },
-        { "name": "Matrix", "weight": 45, "rarityTier": "Rare" },
-        { "name": "Inferno", "weight": 30, "rarityTier": "Epic" },
-        { "name": "Ice City", "weight": 20, "rarityTier": "Epic" },
-        { "name": "Neon Skyline", "weight": 10, "rarityTier": "Legendary" }
+        {
+          "name": "Blue",
+          "weight": 140,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Purple",
+          "weight": 140,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Green",
+          "weight": 130,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Red",
+          "weight": 120,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Yellow",
+          "weight": 110,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Galaxy",
+          "weight": 55,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Matrix",
+          "weight": 45,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Inferno",
+          "weight": 30,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Ice City",
+          "weight": 20,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Neon Skyline",
+          "weight": 10,
+          "rarityTier": "Legendary"
+        }
       ]
     },
     {
       "name": "Aura",
       "traits": [
-        { "name": "None", "weight": 700, "rarityTier": "Common", "none": true },
-        { "name": "Pink Glow", "weight": 120, "rarityTier": "Rare" },
-        { "name": "Cyan Glow", "weight": 100, "rarityTier": "Rare" },
-        { "name": "Golden Aura", "weight": 50, "rarityTier": "Epic" },
-        { "name": "Rainbow Aura", "weight": 18, "rarityTier": "Legendary" },
-        { "name": "Solana Aura", "weight": 12, "rarityTier": "Legendary" }
+        {
+          "name": "None",
+          "weight": 700,
+          "rarityTier": "Common",
+          "none": true
+        },
+        {
+          "name": "Pink Glow",
+          "weight": 120,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Cyan Glow",
+          "weight": 100,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Golden Aura",
+          "weight": 50,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Rainbow Aura",
+          "weight": 18,
+          "rarityTier": "Legendary"
+        },
+        {
+          "name": "Solana Aura",
+          "weight": 12,
+          "rarityTier": "Legendary"
+        }
       ]
     },
     {
       "name": "Body",
       "traits": [
-        { "name": "Classic White", "weight": 220, "rarityTier": "Common" },
-        { "name": "Black", "weight": 180, "rarityTier": "Common" },
-        { "name": "Brown", "weight": 160, "rarityTier": "Common" },
-        { "name": "Grey", "weight": 140, "rarityTier": "Common" },
-        { "name": "Zombie Green", "weight": 90, "rarityTier": "Rare" },
-        { "name": "Golden", "weight": 70, "rarityTier": "Rare" },
-        { "name": "Robot", "weight": 55, "rarityTier": "Epic" },
-        { "name": "Ice", "weight": 40, "rarityTier": "Epic" },
-        { "name": "Lava", "weight": 25, "rarityTier": "Legendary" },
-        { "name": "Ghost", "weight": 20, "rarityTier": "Legendary" }
+        {
+          "name": "Classic White",
+          "weight": 220,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Black",
+          "weight": 180,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Brown",
+          "weight": 160,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Grey",
+          "weight": 140,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Zombie Green",
+          "weight": 90,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Golden",
+          "weight": 70,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Robot",
+          "weight": 55,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Ice",
+          "weight": 40,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Lava",
+          "weight": 25,
+          "rarityTier": "Legendary"
+        },
+        {
+          "name": "Ghost",
+          "weight": 20,
+          "rarityTier": "Legendary"
+        }
       ]
     },
     {
       "name": "Horns",
       "traits": [
-        { "name": "Classic Tan", "weight": 220, "rarityTier": "Common" },
-        { "name": "Dark", "weight": 170, "rarityTier": "Common" },
-        { "name": "Curved Red", "weight": 130, "rarityTier": "Common" },
-        { "name": "Golden", "weight": 90, "rarityTier": "Rare" },
-        { "name": "Ice Blue", "weight": 80, "rarityTier": "Rare" },
-        { "name": "Purple", "weight": 70, "rarityTier": "Rare" },
-        { "name": "Flaming", "weight": 45, "rarityTier": "Epic" },
-        { "name": "Rainbow", "weight": 20, "rarityTier": "Legendary" }
+        {
+          "name": "Classic Tan",
+          "weight": 220,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Dark",
+          "weight": 170,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Curved Red",
+          "weight": 130,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Golden",
+          "weight": 90,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Ice Blue",
+          "weight": 80,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Purple",
+          "weight": 70,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Flaming",
+          "weight": 45,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Rainbow",
+          "weight": 20,
+          "rarityTier": "Legendary"
+        }
       ]
     },
     {
       "name": "Eyes",
       "traits": [
-        { "name": "Classic", "weight": 240, "rarityTier": "Common" },
-        { "name": "Green", "weight": 150, "rarityTier": "Common" },
-        { "name": "Blue", "weight": 150, "rarityTier": "Common" },
-        { "name": "Sunglasses", "weight": 100, "rarityTier": "Rare" },
-        { "name": "Cyber Visor", "weight": 80, "rarityTier": "Rare" },
-        { "name": "Red Glow", "weight": 60, "rarityTier": "Epic" },
-        { "name": "Laser", "weight": 35, "rarityTier": "Epic" },
-        { "name": "Dead X", "weight": 30, "rarityTier": "Epic" },
-        { "name": "Hypno", "weight": 20, "rarityTier": "Legendary" },
-        { "name": "Heart", "weight": 15, "rarityTier": "Legendary" }
+        {
+          "name": "Classic",
+          "weight": 240,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Green",
+          "weight": 150,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Blue",
+          "weight": 150,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Sunglasses",
+          "weight": 100,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Cyber Visor",
+          "weight": 80,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Red Glow",
+          "weight": 60,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Laser",
+          "weight": 35,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Dead X",
+          "weight": 30,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Hypno",
+          "weight": 20,
+          "rarityTier": "Legendary"
+        },
+        {
+          "name": "Heart",
+          "weight": 15,
+          "rarityTier": "Legendary"
+        }
       ]
     },
     {
       "name": "Mouth",
       "traits": [
-        { "name": "Classic", "weight": 260, "rarityTier": "Common" },
-        { "name": "Smile", "weight": 160, "rarityTier": "Common" },
-        { "name": "Ring", "weight": 120, "rarityTier": "Common" },
-        { "name": "Cigar", "weight": 90, "rarityTier": "Rare" },
-        { "name": "Pipe", "weight": 70, "rarityTier": "Rare" },
-        { "name": "Tongue", "weight": 60, "rarityTier": "Epic" },
-        { "name": "Gold Grill", "weight": 40, "rarityTier": "Epic" }
+        {
+          "name": "Classic",
+          "weight": 260,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Smile",
+          "weight": 160,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Ring",
+          "weight": 120,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Cigar",
+          "weight": 90,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Pipe",
+          "weight": 70,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Tongue",
+          "weight": 60,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Gold Grill",
+          "weight": 40,
+          "rarityTier": "Epic"
+        }
       ]
     },
     {
       "name": "Clothes",
       "traits": [
-        { "name": "None", "weight": 200, "rarityTier": "Common", "none": true },
-        { "name": "Black Hoodie", "weight": 150, "rarityTier": "Common" },
-        { "name": "Blue Hoodie", "weight": 130, "rarityTier": "Common" },
-        { "name": "Orange Hoodie", "weight": 110, "rarityTier": "Common" },
-        { "name": "Suit", "weight": 90, "rarityTier": "Rare" },
-        { "name": "Leather Jacket", "weight": 70, "rarityTier": "Rare" },
-        { "name": "Fur Coat", "weight": 50, "rarityTier": "Epic" },
-        { "name": "Red Robe", "weight": 40, "rarityTier": "Epic" },
-        { "name": "Golden Armor", "weight": 20, "rarityTier": "Legendary" }
+        {
+          "name": "None",
+          "weight": 200,
+          "rarityTier": "Common",
+          "none": true
+        },
+        {
+          "name": "Black Hoodie",
+          "weight": 150,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Blue Hoodie",
+          "weight": 130,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Orange Hoodie",
+          "weight": 110,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Suit",
+          "weight": 90,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Leather Jacket",
+          "weight": 70,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Fur Coat",
+          "weight": 50,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Red Robe",
+          "weight": 40,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Golden Armor",
+          "weight": 20,
+          "rarityTier": "Legendary"
+        }
       ]
     },
     {
       "name": "Chain",
       "traits": [
-        { "name": "None", "weight": 420, "rarityTier": "Common", "none": true },
-        { "name": "Gold Chain", "weight": 140, "rarityTier": "Common" },
-        { "name": "Ice Chain", "weight": 100, "rarityTier": "Rare" },
-        { "name": "Cuban Link", "weight": 80, "rarityTier": "Rare" },
-        { "name": "Amulet", "weight": 55, "rarityTier": "Epic" },
-        { "name": "Purple Gem", "weight": 40, "rarityTier": "Epic" },
-        { "name": "Star Medallion", "weight": 25, "rarityTier": "Legendary" },
-        { "name": "Solana Pendant", "weight": 15, "rarityTier": "Legendary" }
+        {
+          "name": "None",
+          "weight": 420,
+          "rarityTier": "Common",
+          "none": true
+        },
+        {
+          "name": "Gold Chain",
+          "weight": 140,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Ice Chain",
+          "weight": 100,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Cuban Link",
+          "weight": 80,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Amulet",
+          "weight": 55,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Purple Gem",
+          "weight": 40,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Star Medallion",
+          "weight": 25,
+          "rarityTier": "Legendary"
+        },
+        {
+          "name": "Solana Pendant",
+          "weight": 15,
+          "rarityTier": "Legendary"
+        }
       ]
     },
     {
       "name": "Hat",
       "traits": [
-        { "name": "None", "weight": 300, "rarityTier": "Common", "none": true },
-        { "name": "Red Cap", "weight": 130, "rarityTier": "Common" },
-        { "name": "Cowboy", "weight": 110, "rarityTier": "Common" },
-        { "name": "Top Hat", "weight": 80, "rarityTier": "Rare" },
-        { "name": "Pirate Hat", "weight": 70, "rarityTier": "Rare" },
-        { "name": "Viking Helm", "weight": 60, "rarityTier": "Rare" },
-        { "name": "Wizard Hat", "weight": 45, "rarityTier": "Epic" },
-        { "name": "Samurai Helm", "weight": 35, "rarityTier": "Epic" },
-        { "name": "Halo", "weight": 20, "rarityTier": "Legendary" },
-        { "name": "Crown", "weight": 12, "rarityTier": "Legendary" }
+        {
+          "name": "None",
+          "weight": 300,
+          "rarityTier": "Common",
+          "none": true
+        },
+        {
+          "name": "Red Cap",
+          "weight": 130,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Cowboy",
+          "weight": 110,
+          "rarityTier": "Common"
+        },
+        {
+          "name": "Top Hat",
+          "weight": 80,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Pirate Hat",
+          "weight": 70,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Viking Helm",
+          "weight": 60,
+          "rarityTier": "Rare"
+        },
+        {
+          "name": "Wizard Hat",
+          "weight": 45,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Samurai Helm",
+          "weight": 35,
+          "rarityTier": "Epic"
+        },
+        {
+          "name": "Halo",
+          "weight": 20,
+          "rarityTier": "Legendary"
+        },
+        {
+          "name": "Crown",
+          "weight": 12,
+          "rarityTier": "Legendary"
+        }
       ]
     }
   ],
   "exclusions": [
-    { "$comment": "traits that clash visually — extend as art lands", "if": { "Hat": "Crown" }, "not": { "Eyes": "Cyber Visor" } },
-    { "if": { "Body": "Ghost" }, "not": { "Clothes": "Golden Armor" } }
+    {
+      "$comment": "traits that clash visually \u2014 extend as art lands",
+      "if": {
+        "Hat": "Crown"
+      },
+      "not": {
+        "Eyes": "Cyber Visor"
+      }
+    },
+    {
+      "if": {
+        "Body": "Ghost"
+      },
+      "not": {
+        "Clothes": "Golden Armor"
+      }
+    }
   ]
 }

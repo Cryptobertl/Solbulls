@@ -5,14 +5,14 @@
  *   OG  — the 100 rarest bulls (rarity-report.json allowlistPool),
  *         guarded by allowList (Merkle root of holder wallets) +
  *         tokenBurn + botTax. Holder pre-phase.
- *   PUB — the remaining 788 bulls, guarded by tokenBurn + mintLimit
+ *   PUB — the remaining 899 bulls, guarded by tokenBurn + mintLimit
  *         (10/wallet) + botTax + startDate. Public phase.
  *
  * Guard groups can't partition WHICH items a wallet receives, so two
  * machines is the clean way to reserve specific items for holders.
  *
  * Burn amount: set BURN_AMOUNT (whole tokens) — fix it from a 7-day
- * TWAP at ~0.1 SOL worth right before launch. Allowlist wallets: put
+ * TWAP at ~0.05 SOL worth right before launch. Allowlist wallets: put
  * one address per line in allowlist.txt.
  */
 import fs from "node:fs";

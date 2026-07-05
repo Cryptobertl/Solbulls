@@ -89,16 +89,15 @@ vars once the mint goes live: `NEXT_PUBLIC_CANDY_MACHINE`, `NEXT_PUBLIC_CLUSTER`
 
 - [x] Proposal & project plan written
 - [x] Phase 0 — token CA pinned ([docs/TOKEN.md](docs/TOKEN.md)); parameters ratified
-      (888 bulls · burn ≈ 0.1 SOL worth per mint · max 10/wallet · holder allowlist for the
-      100 rarest · pixel art per the [Bull Society master guide](assets/img/bull-society-master-guide.jpeg) · Vercel hosting)
+      (Series 1: 999 bulls of 2,222 max · burn ≈ 0.05 SOL worth per mint · max 10/wallet · holder allowlist for the
+      100 rarest · pixel art at the original logo’s native 100px ([master guide](assets/img/bull-society-master-guide.png)) · Vercel hosting)
 - [x] Phase 1 — website built in `apps/web` (Home, Token, Mint, Collection, Roadmap, Lore, FAQ;
       Phantom-first wallet connect; DexScreener live stats) — ready to deploy
 - [ ] Phase 2 — production domain cutover (solbulls.xyz → Vercel), on-chain burn counter
 - [x] Phase 2.5 — NFT generator built in `packages/nft` (weighted traits, seeded + reproducible,
       rarity ranking with Mythic/Epic/Rare/Common tiers, top-100 allowlist pool, Sugar-ready
-      Metaplex output) — verified with a full 888 dry-run
-- [x] Phase 2.6 — **all art drawn as code**: full trait-layer set + 10 legendary 1/1s
-      (`packages/nft/src/draw-layers.mjs`), full 888 collection generated and visually verified
+      Metaplex output) — verified with a full Series-1 dry-run
+- [x] Phase 2.6 — **all art drawn as code**: the original logo bull extracted at native 100px as the base, full trait-layer set + 10 legendary 1/1s (`packages/nft/src/draw-layers.mjs`), all 999 Series-1 bulls generated and visually verified
 - [x] Phase 2.7 — devnet tooling ready (`packages/mint`: mock token, Arweave upload, Core
       collection, OG+PUB candy machines with tokenBurn/allowlist/mintLimit/botTax guards,
       CLI test mint) + real Burn & Mint transaction wired into /mint —

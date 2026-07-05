@@ -37,9 +37,9 @@ npm run collection        # Core collection with 5% royalties
 printf '<your-phantom-wallet>\n' > allowlist.txt
 
 # burn price: whole tokens per mint. On devnet any number works;
-# on mainnet fix it from a 7-day TWAP at ~0.1 SOL worth.
+# on mainnet fix it from a 7-day TWAP at ~0.05 SOL worth.
 BURN_AMOUNT=100000 npm run candy-machines
-# → creates OG (100 rarest, allowlist-gated) and PUB (788) machines,
+# → creates OG (100 rarest, allowlist-gated) and PUB (899) machines,
 #   loads all items, saves addresses to deploy.config.json
 
 npm run test-mint         # CLI mint: burns tokens + mints one SolBull

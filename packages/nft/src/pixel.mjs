@@ -5,7 +5,7 @@
  */
 import sharp from "sharp";
 
-export const S = 64; // authoring grid
+export const S = 100; // authoring grid — native resolution of the original logo
 
 export function hex(c, a = 255) {
   const n = parseInt(c.slice(1), 16);
@@ -41,9 +41,9 @@ export class Layer {
   rect(x0, y0, x1, y1, rgba) {
     for (let y = y0; y <= y1; y++) this.hspan(x0, x1, y, rgba);
   }
-  // symmetric span: half-width hw around the 31|32 center line
+  // symmetric span: half-width hw around the 49|50 center line
   cspan(y, hw, rgba) {
-    this.hspan(32 - hw, 31 + hw, y, rgba);
+    this.hspan(50 - hw, 49 + hw, y, rgba);
   }
   // mirror a pixel op across the center line
   mpx(x, y, rgba) {
@@ -66,7 +66,7 @@ export class Layer {
       }
     return this;
   }
-  async save(file, outSize = 64) {
+  async save(file, outSize = S) {
     await sharp(Buffer.from(this.d), { raw: { width: S, height: S, channels: 4 } })
       .resize(outSize, outSize, { kernel: "nearest" })
       .png()

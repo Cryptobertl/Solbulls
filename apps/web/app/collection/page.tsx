@@ -18,23 +18,24 @@ const LEGENDARIES = [
 ];
 
 const PREVIEWS: Array<{ file: string; label: string; tier: string }> = [
-  { file: "bull-710.png", label: "King Bull", tier: "Legendary 1/1" },
-  { file: "bull-411.png", label: "SolBull #411", tier: "Mythic" },
-  { file: "bull-290.png", label: "SolBull #290", tier: "Mythic" },
-  { file: "bull-653.png", label: "SolBull #653", tier: "Epic" },
-  { file: "bull-293.png", label: "SolBull #293", tier: "Rare" },
-  { file: "bull-169.png", label: "SolBull #169", tier: "Common" },
+  { file: "bull-547.png", label: "King Bull", tier: "Legendary 1/1" },
+  { file: "bull-659.png", label: "SolBull #659", tier: "Mythic" },
+  { file: "bull-475.png", label: "SolBull #475", tier: "Mythic" },
+  { file: "bull-291.png", label: "SolBull #291", tier: "Epic" },
+  { file: "bull-634.png", label: "SolBull #634", tier: "Rare" },
+  { file: "bull-918.png", label: "SolBull #918", tier: "Common" },
 ];
 
 const TRAITS: Array<[string, string]> = [
-  ["Bodies", "15+"],
-  ["Horns", "20+"],
-  ["Eyes", "35+"],
-  ["Mouths", "20+"],
-  ["Hats", "35+"],
-  ["Clothes", "30+"],
-  ["Chains", "15+"],
-  ["Backgrounds", "30+"],
+  ["Bodies", "10"],
+  ["Horns", "8"],
+  ["Eyes", "10"],
+  ["Mouths", "7"],
+  ["Hats", "9"],
+  ["Clothes", "8"],
+  ["Chains", "7"],
+  ["Backgrounds", "10"],
+  ["Auras", "5"],
 ];
 
 export default function CollectionPage() {
@@ -45,11 +46,12 @@ export default function CollectionPage() {
           The <span className="gradient-text">SolBull</span> collection
         </h1>
         <p className="text-zinc-300">
-          {MINT_CONFIG.collectionSize.toLocaleString()} bulls. 64×64 pixel
-          art, layer-based, hand-designed traits — thousands of unique
-          combinations, plus {LEGENDARIES.length} hand-crafted legendary 1/1s.
-          The live gallery with rarity explorer appears here once minting
-          starts.
+          {MINT_CONFIG.collectionSize.toLocaleString()} bulls in Series 1 —
+          the herd can grow to {MINT_CONFIG.maxSupply.toLocaleString()} max in
+          later series. Every bull is built on the original Solana-ecosystem
+          logo bull at its native 100×100 pixels, layer-based, with{" "}
+          {LEGENDARIES.length} hand-crafted legendary 1/1s. The live gallery
+          with rarity explorer appears here once minting starts.
         </p>
       </header>
 
@@ -79,11 +81,11 @@ export default function CollectionPage() {
       <section className="grid md:grid-cols-2 gap-8 items-start">
         <div className="gradient-border p-4">
           <Image
-            src="/bull-society-master-guide.jpeg"
-            alt="SolBull pixel art master guide: layers, trait categories, stacking order and legendary 1/1 bulls"
-            width={1200}
-            height={1210}
-            className="rounded-lg w-full h-auto"
+            src="/bull-society-master-guide.png"
+            alt="SolBulls master guide: every real trait rendered on the original bull — bodies, horns, eyes, mouths, hats, clothes, chains, backgrounds, auras, and the legendary 1/1s"
+            width={1398}
+            height={1936}
+            className="rounded-lg w-full h-auto [image-rendering:pixelated]"
           />
         </div>
         <div className="flex flex-col gap-6">

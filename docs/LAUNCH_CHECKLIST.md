@@ -5,7 +5,7 @@ Status legend: ✅ done · 🟡 ready, needs a machine with chain access · 🔴
 ## Built & committed (✅)
 
 - ✅ Website live on Vercel (auto-deploys from `main`), all pages, Phantom-first wallet connect
-- ✅ 888-piece collection generated: art drawn as code, 878 unique + 10 legendary 1/1s,
+- ✅ Series-1 collection generated (999 of 2,222 max): art at the original logo's native 100px, 989 unique + 10 legendary 1/1s,
       rarity tiers, top-100 allowlist pool, seed committed → reproducible by anyone
 - ✅ Real Burn & Mint transaction wired into /mint (activates via env vars, preview mode until then)
 - ✅ Deployment scripts: mock token, Arweave upload, collection, OG + PUB candy machines, CLI test mint
@@ -17,7 +17,7 @@ Status legend: ✅ done · 🟡 ready, needs a machine with chain access · 🔴
    (`solana-keygen`, airdrop, `npm run mock-token → upload → collection → candy-machines → test-mint`).
 2. **Phantom QA** — run the 5-surface matrix against the devnet deployment; fix anything red.
 3. **Domain** — point `solbulls.xyz` at the Vercel project (Settings → Domains).
-4. **Decisions to announce** (X community): burn amount (TWAP calc at ~0.1 SOL), allowlist
+4. **Decisions to announce** (X community): burn amount (TWAP calc at ~0.05 SOL), allowlist
    snapshot criteria + date, launch date/time.
 5. **Snapshot** — export holder wallets meeting the criteria → `packages/mint/allowlist.txt`.
 6. **Ops safety** — mainnet keypair on a hardware wallet; fund ~2 SOL + upload budget;

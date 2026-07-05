@@ -13,7 +13,7 @@ export default function MintPage() {
           SolBull 🔥
         </h1>
         <p className="text-zinc-300">
-          {MINT_CONFIG.collectionSize.toLocaleString()} pixel bulls. The only
+          {MINT_CONFIG.collectionSize.toLocaleString()} pixel bulls in Series 1 (max {MINT_CONFIG.maxSupply.toLocaleString()} across all series, later at a higher price). The only
           way in: burn roughly {MINT_CONFIG.burnTargetSol} SOL worth of
           $SOLBULLS per mint. The {MINT_CONFIG.allowlistReserve} rarest bulls
           are reserved for the holder allowlist phase. Works in Phantom on
