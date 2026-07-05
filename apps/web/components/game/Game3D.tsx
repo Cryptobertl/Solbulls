@@ -46,6 +46,7 @@ interface Hud {
 
 export default function Game3D({
   onRunEnd,
+  getRun,
 }: {
   onRunEnd?: (result: {
     score: number;
@@ -53,6 +54,8 @@ export default function Game3D({
     inputs: InputEvent[];
     ticks: number;
   }) => void;
+  /** Ranked mode: fetches a server-issued seed; null falls back to local play */
+  getRun?: () => Promise<{ seed: number } | null>;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -247,8 +250,17 @@ export default function Game3D({
     }
   }, []);
 
-  const start = useCallback(() => {
-    const seed = (Math.floor(Math.random() * 0xffffffff) >>> 0) || 1;
+  const startingRef = useRef(false);
+  const start = useCallback(async () => {
+    if (startingRef.current) return;
+    startingRef.current = true;
+    let seed = (Math.floor(Math.random() * 0xffffffff) >>> 0) || 1;
+    if (getRun) {
+      // server-issued seed makes the run rank on the global leaderboard
+      const run = await getRun().catch(() => null);
+      if (run) seed = run.seed;
+    }
+    startingRef.current = false;
     stateRef.current = createGame(seed);
     inputsRef.current = [];
     pendingRef.current = { left: false, right: false, jump: false, roll: false };
@@ -259,7 +271,7 @@ export default function Game3D({
     pausedRef.current = false;
     setPhase("playing");
     rafRef.current = requestAnimationFrame((n) => loopRef.current(n));
-  }, []);
+  }, [getRun]);
 
   // keyboard
   useEffect(() => {

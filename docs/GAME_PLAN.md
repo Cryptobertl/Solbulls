@@ -149,8 +149,15 @@ budget that can never exceed fees earned.
 
 - **WS1 — Game (no rewards):** canvas runner, touch controls, sprites, local high score. Ships as
   pure fun even if the backend lags. This is the demo.
-- **WS2 — Backend + auth + leaderboard:** DB + Drizzle schema, SIWS login, `/api/run/start|submit`
-  with anti-cheat, off-chain points, `/api/leaderboard`. Game now records real scores per wallet.
+- **WS2 — Backend + auth + leaderboard:** ✅ SHIPPED (WS2a). DB (Drizzle; Neon in prod via
+  `DATABASE_URL`, PGlite locally with zero setup), SIWS login (`/api/auth/nonce|verify`, JWT
+  cookie), nickname (`/api/profile`), ranked runs (`/api/run/start` issues a server seed +
+  HMAC token; `/api/run/submit` REPLAYS the input log through the deterministic engine and
+  stores only the replayed score), weekly `/api/leaderboard` + `/leaderboard` page.
+  E2E suite: `npm run check:api` (full flow + replay/forgery rejection, ALL GREEN).
+  **To activate in production, set two Vercel env vars:** `DATABASE_URL` (free Neon Postgres)
+  and `AUTH_SECRET` (any long random string, e.g. `openssl rand -base64 48`). Until then the
+  site shows "leaderboard coming online soon" and play stays local — nothing breaks.
 - **WS3 — Reward pipeline (devnet then mainnet):** reward wallet, pump fee-claim, Jupiter buy, SPL
   distribute, cron orchestration, payout rows + Solscan links on the leaderboard. Test end-to-end
   on devnet with the mock token before any mainnet money moves.
