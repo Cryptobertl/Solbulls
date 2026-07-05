@@ -76,9 +76,6 @@ export default function Home() {
           <a href={LINKS.community} className="underline hover:text-white">
             X Community
           </a>
-          <a href={LINKS.discord} className="underline hover:text-white">
-            Discord
-          </a>
           <a href={LINKS.dexscreener} className="underline hover:text-white">
             DexScreener
           </a>

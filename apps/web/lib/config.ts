@@ -29,7 +29,6 @@ export const LINKS = {
   community: "https://x.com/i/communities/2027457477978272111",
   /** Heritage account from the 2021 SolBulls Gang era */
   twitter: "https://twitter.com/SolanaBullsNFT",
-  discord: "https://discord.com/invite/Quf39wHSjg",
   github: "https://github.com/Cryptobertl/Solbulls",
   ecosystemListing:
     "https://github.com/solana-labs/ecosystem/blob/d71e170ea5250426ed51500411ea3ceb3dfff015/projects/solbulls.md",
