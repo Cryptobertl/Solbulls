@@ -22,7 +22,7 @@ export const ENGINE_VERSION = 2;
 
 export const LANES = 3;
 export const TICK_HZ = 60;
-export const START_BEAR_GAP = 3;
+export const START_CHASE_GAP = 3;
 export const COIN_VALUE = 10;
 export const ROLL_TICKS = 36; // 0.6 s tuck
 export const IFRAME_TICKS = 45; // 0.75 s of post-hit invulnerability
@@ -75,7 +75,7 @@ export interface GameState {
   coins: number;
   bonusScore: number;
   nearMisses: number;
-  bearGap: number;
+  chaseGap: number;
   over: boolean;
   entities: Entity[];
   nextSpawnTick: number;
@@ -116,7 +116,7 @@ export function createGame(seed: number): GameState {
     coins: 0,
     bonusScore: 0,
     nearMisses: 0,
-    bearGap: START_BEAR_GAP,
+    chaseGap: START_CHASE_GAP,
     over: false,
     entities: [],
     nextSpawnTick: Math.round(0.9 * TICK_HZ),
@@ -147,9 +147,9 @@ function takeHit(s: GameState, e: Entity) {
     s.iframes = IFRAME_TICKS;
     return;
   }
-  s.bearGap--;
+  s.chaseGap--;
   s.iframes = IFRAME_TICKS;
-  if (s.bearGap <= 0) s.over = true;
+  if (s.chaseGap <= 0) s.over = true;
 }
 
 // ------------------------------------------------------------- spawning

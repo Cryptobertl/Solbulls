@@ -7,13 +7,13 @@ import {
   score as scoreOf,
   LANES,
   TICK_HZ,
-  START_BEAR_GAP,
+  START_CHASE_GAP,
   type GameState,
   type InputEvent,
 } from "@/lib/game/engine";
 
 type Phase = "ready" | "playing" | "over";
-const SPRITE_SRC = ["bull", "bear", "coin", "barrier", "rock"] as const;
+const SPRITE_SRC = ["bull", "runner", "coin", "barrier", "rock"] as const;
 type SpriteName = (typeof SPRITE_SRC)[number];
 
 const HI_KEY = "solbulls-runner-hi";
@@ -58,7 +58,7 @@ export function GameCanvas({
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [phase, setPhase] = useState<Phase>("ready");
-  const [hud, setHud] = useState({ score: 0, coins: 0, gap: START_BEAR_GAP });
+  const [hud, setHud] = useState({ score: 0, coins: 0, gap: START_CHASE_GAP });
   const hi = useSyncExternalStore(subscribeHi, readHi, () => 0);
 
   const spritesRef = useRef<Record<SpriteName, HTMLImageElement> | null>(null);
@@ -115,8 +115,8 @@ export function GameCanvas({
     const size = Math.min(laneW * 0.8, 92);
 
     const SPRITE_FOR: Record<string, SpriteName> = {
-      bull: "bull", bear: "bear", coin: "coin", barrier: "barrier", rock: "rock",
-      train: "barrier", gantry: "barrier", magnet: "coin", mult: "coin", shield: "coin",
+      bull: "bull", coin: "coin", barrier: "barrier", rock: "rock",
+      train: "barrier", gantry: "barrier", magnet: "coin", mult: "coin", shield: "coin", runner: "runner",
     };
     for (const e of s.entities) {
       if (e.hit) continue;
@@ -127,22 +127,23 @@ export function GameCanvas({
       ctx.drawImage(img, laneX(e.lane) - es / 2, py - es / 2, es, es);
     }
 
-    const bearClose = (START_BEAR_GAP - s.bearGap) / START_BEAR_GAP;
-    const bearY = playerY + 70 + (1 - bearClose) * 40;
-    const bearS = size * (0.8 + bearClose * 0.25);
-    ctx.globalAlpha = 0.9;
-    ctx.drawImage(sprites.bear, laneX(s.lane) - bearS / 2, bearY - bearS / 2, bearS, bearS);
+    // the Bull chases YOU
+    const chaseClose = (START_CHASE_GAP - s.chaseGap) / START_CHASE_GAP;
+    const chaseY = playerY + 70 + (1 - chaseClose) * 40;
+    const chaseS = size * (0.9 + chaseClose * 0.3);
+    ctx.globalAlpha = 0.95;
+    ctx.drawImage(sprites.bull, laneX(s.lane) - chaseS / 2, chaseY - chaseS / 2, chaseS, chaseS);
     ctx.globalAlpha = 1;
 
     const bob = s.onGround ? Math.sin(s.dist * 3) * 3 : 0;
     const jump = s.jumpY * (playerY - spawnY) * 0.5;
-    const bullS = size;
+    const runS = size * 0.9;
     ctx.drawImage(
-      sprites.bull,
-      laneX(s.lane) - bullS / 2,
-      playerY - bullS / 2 - jump + bob,
-      bullS,
-      bullS,
+      sprites.runner,
+      laneX(s.lane) - runS / 2,
+      playerY - runS / 2 - jump + bob,
+      runS,
+      runS,
     );
   }, []);
 
@@ -168,7 +169,7 @@ export function GameCanvas({
         if (s.over) break;
       }
       draw(s);
-      setHud({ score: scoreOf(s), coins: s.coins, gap: s.bearGap });
+      setHud({ score: scoreOf(s), coins: s.coins, gap: s.chaseGap });
 
       if (s.over) {
         const finalScore = scoreOf(s);
@@ -194,7 +195,7 @@ export function GameCanvas({
     accRef.current = 0;
     lastRef.current = performance.now();
     setPhase("playing");
-    setHud({ score: 0, coins: 0, gap: START_BEAR_GAP });
+    setHud({ score: 0, coins: 0, gap: START_CHASE_GAP });
     rafRef.current = requestAnimationFrame((n) => loopRef.current(n));
   }, []);
 
@@ -281,7 +282,7 @@ export function GameCanvas({
           Score <span className="gradient-text">{hud.score}</span>
         </span>
         <span className="text-zinc-300">🐂 {hud.coins}</span>
-        <span className="text-zinc-300">{"🐻".repeat(Math.max(0, hud.gap))}</span>
+        <span className="text-zinc-300">{"🐂".repeat(Math.max(0, hud.gap))}</span>
         <span className="text-zinc-400">Best {hi}</span>
       </div>
 
@@ -299,8 +300,8 @@ export function GameCanvas({
                   Sol<span className="gradient-text">Bulls</span> Runner
                 </h2>
                 <p className="text-zinc-300 text-sm max-w-xs">
-                  Outrun the bear. Swipe or arrow keys to switch lanes, tap or ↑
-                  to jump rocks, grab $SOLBULLS coins. Every hit lets the bear
+                  Are you faster than the Bull? Swipe or arrow keys to switch
+                  lanes, tap / ↑ to jump, ↓ to roll. Every hit lets the Bull
                   closer.
                 </p>
                 <button
@@ -312,7 +313,7 @@ export function GameCanvas({
               </>
             ) : (
               <>
-                <h2 className="text-3xl font-extrabold">Caught! 🐻</h2>
+                <h2 className="text-3xl font-extrabold">The Bull got you! 🐂</h2>
                 <p className="text-zinc-200">
                   Score <span className="gradient-text font-bold">{hud.score}</span> ·
                   🐂 {hud.coins} coins

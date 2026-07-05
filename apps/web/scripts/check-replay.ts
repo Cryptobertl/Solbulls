@@ -6,8 +6,8 @@
  * 2. Same seed twice → identical periodic state traces.
  * 3. Invariants sampled every tick:
  *      - never all 3 lanes blocked by trains
- *      - over ⇔ bearGap <= 0
- *      - shield absorbs exactly one hit (bearGap unchanged on that hit)
+ *      - over ⇔ chaseGap <= 0
+ *      - shield absorbs exactly one hit (chaseGap unchanged on that hit)
  *      - coins/bonusScore never decrease
  * 4. v1-format logs (no roll events) still simulate.
  */
@@ -60,7 +60,7 @@ function randomPolicy(bot: () => number, s: GameState): Actions {
 function trace(s: GameState): string {
   return [
     s.tick, s.lane, s.jumpY.toFixed(6), s.rollTicks, s.coins, s.bonusScore,
-    s.bearGap, s.magnetTicks, s.multTicks, s.shield ? 1 : 0,
+    s.chaseGap, s.magnetTicks, s.multTicks, s.shield ? 1 : 0,
     s.entities.length, Math.floor(s.dist * 1e6),
   ].join(",");
 }
@@ -77,7 +77,7 @@ for (let i = 0; i < SEEDS; i++) {
   // ---- live run with input capture + invariants ----
   const s = createGame(seed);
   const inputs: InputEvent[] = [];
-  let prevBearGap = s.bearGap;
+  let prevBearGap = s.chaseGap;
   let prevShield = false;
   let prevCoins = 0;
   let prevBonus = 0;
@@ -94,15 +94,15 @@ for (let i = 0; i < SEEDS; i++) {
     // invariants
     const blocked = s.laneBlockedUntil.filter((u) => u > s.tick).length;
     check(blocked < LANES, `seed ${seed}: all ${LANES} lanes blocked at tick ${s.tick}`);
-    check(s.over === (s.bearGap <= 0), `seed ${seed}: over/bearGap mismatch`);
+    check(s.over === (s.chaseGap <= 0), `seed ${seed}: over/chaseGap mismatch`);
     check(s.coins >= prevCoins, `seed ${seed}: coins decreased`);
     check(s.bonusScore >= prevBonus, `seed ${seed}: bonusScore decreased`);
-    if (prevShield && !s.shield && s.bearGap === prevBearGap) shieldAbsorbs++;
+    if (prevShield && !s.shield && s.chaseGap === prevBearGap) shieldAbsorbs++;
     check(
-      !(prevShield && !s.shield && s.bearGap !== prevBearGap),
-      `seed ${seed}: shield consumed but bearGap changed`,
+      !(prevShield && !s.shield && s.chaseGap !== prevBearGap),
+      `seed ${seed}: shield consumed but chaseGap changed`,
     );
-    prevBearGap = s.bearGap;
+    prevBearGap = s.chaseGap;
     prevShield = s.shield;
     prevCoins = s.coins;
     prevBonus = s.bonusScore;

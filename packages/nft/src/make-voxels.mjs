@@ -20,7 +20,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { Layer, hex } from "./pixel.mjs";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const OUT = path.resolve(ROOT, "../../apps/web/public/game/voxels.json");
@@ -60,46 +59,6 @@ const BULL_GRID = RAW.map((row, y) =>
     return c;
   }),
 );
-
-// ---------------------------------------------------------- bear grid
-// rasterize the 2D sprite bear drawing into a class grid via its colors
-function bearGrid() {
-  const g = new Layer();
-  const F = hex("#6b4a2f"), S = hex("#513722"), D = hex("#160d06");
-  const M = hex("#3a2818"), R = hex("#ff3b3b");
-  g.rect(24, 20, 36, 32, F); g.rect(64, 20, 76, 32, F);
-  g.rect(28, 24, 32, 28, M); g.rect(68, 24, 72, 28, M);
-  for (let y = 26; y <= 78; y++) {
-    const t = (y - 52) / 26;
-    const hw = Math.round(30 * Math.sqrt(Math.max(0, 1 - t * t)) + 8);
-    g.cspan(y, hw, F);
-    g.px(50 - hw, y, S); g.px(49 + hw, y, S);
-  }
-  g.rect(30, 44, 46, 47, S); g.rect(54, 44, 70, 47, S);
-  g.rect(36, 48, 42, 53, D); g.rect(58, 48, 64, 53, D);
-  g.rect(37, 49, 40, 51, R); g.rect(59, 49, 62, 51, R);
-  for (let y = 60; y <= 74; y++) g.cspan(y, 14 - Math.abs(y - 67) / 2, M);
-  g.rect(42, 62, 58, 66, hex("#2a1c10"));
-  g.rect(45, 60, 55, 64, D);
-  g.rect(40, 70, 60, 73, D);
-  g.rect(43, 70, 45, 74, hex("#f4f4fb")); g.rect(55, 70, 57, 74, hex("#f4f4fb"));
-
-  const CLASSMAP = {
-    "107,74,47": "BF", "81,55,34": "BS", "22,13,6": "BD",
-    "58,40,24": "BM", "42,28,16": "BM", "255,59,59": "BR", "244,244,251": "BW",
-  };
-  const grid = [];
-  for (let y = 0; y < 100; y++) {
-    const row = [];
-    for (let x = 0; x < 100; x++) {
-      const i = (y * 100 + x) * 4;
-      if (g.d[i + 3] === 0) { row.push("."); continue; }
-      row.push(CLASSMAP[`${g.d[i]},${g.d[i + 1]},${g.d[i + 2]}`] ?? "BF");
-    }
-    grid.push(row);
-  }
-  return grid;
-}
 
 // ------------------------------------------------------------ helpers
 const PRIORITY = ["D", "BD", "M", "BM", "BR", "BW", "m", "S", "BS", "HS", "HF", "F", "BF"];
@@ -206,33 +165,60 @@ function box(w, h, d, cls, shade) {
 
 // ------------------------------------------------------------- build
 const BULL_CLASSES = ["F", "S", "D", "M", "m", "HF", "HS"];
-const BEAR_HEX = {
-  BF: "#6b4a2f", BS: "#513722", BD: "#160d06",
-  BM: "#3a2818", BR: "#ff3b3b", BW: "#f4f4fb",
-};
-const BEAR_CLASSES = Object.keys(BEAR_HEX);
+const HUMAN_CLASSES = ["HSKIN", "SHIRT", "PANTS", "HAIR", "ACCENT", "SHOE", "HEYE"];
 
 const bullBust = extrude(downsample2(BULL_GRID), { fillClass: "F" });
-const bearBust = extrude(downsample2(bearGrid()), { fillClass: "BF" });
-
 const bullLeg = box(3, 6, 3, "F", "D"); // D = hoof shade on bottom
-const bearLeg = box(3, 5, 3, "BF", "BD");
 const bullTail = [
   [0, 0, 0, "S"], [0, 1, 0, "S"], [0, 2, -1, "S"], [0, 3, -1, "S"], [0, 4, -2, "S"],
   [0, 0, 1, "F"], [0, 1, 1, "F"],
 ];
 
+/** box anchored at its TOP (voxels extend downward) — for swinging limbs */
+function limb(w, h, d, cls, tipCls, tipRows = 2) {
+  return box(w, h, d, cls, cls).map(([x, y, z, c]) => [
+    x,
+    y - (h - 1),
+    z,
+    y < tipRows ? tipCls : c,
+  ]);
+}
+
+// ---- chibi human runner (the player) ----
+// head: skin box with hair cap + eyes on the +z face
+function humanHead() {
+  const vox = [];
+  const W = 9, H = 9, D = 9;
+  for (const [x, y, z, ] of box(W, H, D, "HSKIN", "HSKIN")) {
+    let c = "HSKIN";
+    if (y >= H - 3) c = "HAIR";                    // hair cap
+    if (z < 1 && y < H - 3) c = "HAIR";            // hair back
+    vox.push([x, y, z, c]);
+  }
+  // eyes on the face (+z side)
+  vox.push([-2, 4, (D - 1) / 2 + 4, "HEYE"], [2, 4, (D - 1) / 2 + 4, "HEYE"]);
+  return vox.map(([x, y, z, c]) => [x, y, Math.min(z, (D - 1) / 2 + 4), c]);
+}
+const humanTorso = box(9, 11, 5, "SHIRT", "SHIRT").map(([x, y, z, c]) => {
+  // accent stripe (tie / zipper / logo) down the chest front
+  if (x === 0 && z >= 2 && y < 10) return [x, y, z, "ACCENT"];
+  return [x, y, z, c];
+});
+const humanArm = limb(3, 9, 3, "SHIRT", "HSKIN");
+const humanLeg = limb(3, 10, 3, "PANTS", "SHOE");
+
 const parts = {
   bullBust: { palette: "bull", vox: bullBust },
   bullLeg: { palette: "bull", vox: bullLeg },
   bullTail: { palette: "bull", vox: bullTail },
-  bearBust: { palette: "bear", vox: bearBust },
-  bearLeg: { palette: "bear", vox: bearLeg },
+  humanHead: { palette: "human", vox: humanHead() },
+  humanTorso: { palette: "human", vox: humanTorso },
+  humanArm: { palette: "human", vox: humanArm },
+  humanLeg: { palette: "human", vox: humanLeg },
 };
 
 const rig = {
-  // chibi runner: bust sits on 4 stubby legs; positions in voxel units
-  // relative to the character group origin (ground under center).
+  // bull: chibi bust on 4 stubby legs (now the CHASER)
   bull: {
     bust: { at: [0, 5, 0] },
     legs: [
@@ -241,12 +227,12 @@ const rig = {
     ],
     tail: { at: [0, 14, -6] },
   },
-  bear: {
-    bust: { at: [0, 4, 0] },
-    legs: [
-      { at: [-9, 0, 3] }, { at: [9, 0, 3] },
-      { at: [-9, 0, -3] }, { at: [9, 0, -3] },
-    ],
+  // human: legs/arms pivot at their tops (limb parts are top-anchored)
+  human: {
+    head: { at: [0, 21, 0] },
+    torso: { at: [0, 10, 0] },
+    arms: [{ at: [-6, 19, 0] }, { at: [6, 19, 0] }],
+    legs: [{ at: [-2.5, 9, 0] }, { at: [2.5, 9, 0] }],
   },
 };
 
@@ -261,14 +247,14 @@ if (total > 6000) {
 
 // encode classes as indices; flatten
 function encode(p) {
-  const table = p.palette === "bull" ? BULL_CLASSES : BEAR_CLASSES;
+  const table = p.palette === "bull" ? BULL_CLASSES : HUMAN_CLASSES;
   const flat = [];
   for (const [x, y, z, c] of p.vox) flat.push(x, y, z, table.indexOf(c));
   return { palette: p.palette, vox: flat };
 }
 const json = {
   meta: { voxel: 0.045, version: 1 },
-  palettes: { bull: BULL_CLASSES, bearHex: BEAR_HEX, bear: BEAR_CLASSES },
+  palettes: { bull: BULL_CLASSES, human: HUMAN_CLASSES },
   parts: Object.fromEntries(Object.entries(parts).map(([k, p]) => [k, encode(p)])),
   rig,
 };

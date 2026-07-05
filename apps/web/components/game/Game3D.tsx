@@ -6,17 +6,19 @@ import {
   step,
   score as scoreOf,
   TICK_HZ,
-  START_BEAR_GAP,
+  START_CHASE_GAP,
   type GameState,
   type InputEvent,
   type PowerupType,
 } from "@/lib/game/engine";
 import { SceneManager, type FrameEvents } from "@/lib/game/three/scene";
+import { AVATARS } from "@/lib/game/three/voxel";
 import { themeAt } from "@/lib/game/three/themes";
 
 type Phase = "loading" | "ready" | "playing" | "over";
 
 const HI_KEY = "solbulls-runner-hi";
+const AVATAR_KEY = "solbulls-runner-avatar";
 const HI_EVENT = "solbulls-runner-hi-change";
 function readHi(): number {
   if (typeof window === "undefined") return 0;
@@ -56,9 +58,13 @@ export default function Game3D({
   const wrapRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>("loading");
   const [hud, setHud] = useState<Hud>({
-    score: 0, coins: 0, gap: START_BEAR_GAP, magnet: false, mult: false, shield: false, theme: "Ice City",
+    score: 0, coins: 0, gap: START_CHASE_GAP, magnet: false, mult: false, shield: false, theme: "Ice City",
   });
   const hi = useSyncExternalStore(subscribeHi, readHi, () => 0);
+  const [avatarId, setAvatarId] = useState<string>(
+    () => localStorage.getItem(AVATAR_KEY) ?? AVATARS[0].id,
+  );
+  const avatarRef = useRef(avatarId);
 
   const mgrRef = useRef<SceneManager | null>(null);
   const stateRef = useRef<GameState | null>(null);
@@ -69,7 +75,7 @@ export default function Game3D({
   const lastRef = useRef(0);
   const startTimeRef = useRef(0);
   const loopRef = useRef<(now: number) => void>(() => {});
-  const prevRef = useRef({ jumpY: 0, nearMisses: 0, bearGap: START_BEAR_GAP, pu: { magnet: 0, mult: 0, shield: false } });
+  const prevRef = useRef({ jumpY: 0, nearMisses: 0, chaseGap: START_CHASE_GAP, pu: { magnet: 0, mult: 0, shield: false } });
   const pausedRef = useRef(false);
   const hudRef = useRef<Hud>(hud);
 
@@ -86,8 +92,11 @@ export default function Game3D({
 
     const build = () => {
       mgr?.dispose();
-      mgr = new SceneManager(canvas);
+      mgr = new SceneManager(canvas, avatarRef.current);
       mgrRef.current = mgr;
+      if (process.env.NODE_ENV === "development") {
+        (window as unknown as { __mgr?: SceneManager }).__mgr = mgr;
+      }
       resize();
       mgr.ready.then(() => {
         if (!cancelled) setPhase((p) => (p === "loading" ? "ready" : p));
@@ -176,14 +185,14 @@ export default function Game3D({
         if (s.over) break;
       }
       // engine-state diffs → fx events
-      if (s.bearGap < prev.bearGap) events.hit = true;
+      if (s.chaseGap < prev.chaseGap) events.hit = true;
       if (s.nearMisses > prev.nearMisses) events.nearMiss = true;
       let pu: PowerupType | null = null;
       if (s.magnetTicks > prev.pu.magnet && s.magnetTicks > 400) pu = "magnet";
       if (s.multTicks > prev.pu.mult && s.multTicks > 500) pu = "mult";
       if (s.shield && !prev.pu.shield) pu = "shield";
       if (pu) events.powerup = pu;
-      prev.bearGap = s.bearGap;
+      prev.chaseGap = s.chaseGap;
       prev.nearMisses = s.nearMisses;
       prev.pu = { magnet: s.magnetTicks, mult: s.multTicks, shield: s.shield };
 
@@ -196,7 +205,7 @@ export default function Game3D({
       const next: Hud = {
         score: scoreOf(s),
         coins: s.coins,
-        gap: s.bearGap,
+        gap: s.chaseGap,
         magnet: s.magnetTicks > 0,
         mult: s.multTicks > 0,
         shield: s.shield,
@@ -223,12 +232,27 @@ export default function Game3D({
     };
   }, [onRunEnd]);
 
+  const pickAvatar = useCallback((id: string) => {
+    setAvatarId(id);
+    avatarRef.current = id;
+    localStorage.setItem(AVATAR_KEY, id);
+    const mgr = mgrRef.current;
+    if (mgr) {
+      mgr.setAvatar(id);
+      // refresh the idle preview so the new avatar shows immediately
+      if (!stateRef.current || stateRef.current.over) {
+        const idle = createGame(1);
+        mgr.render(idle, 0, 0, 1 / 60, 0, {});
+      }
+    }
+  }, []);
+
   const start = useCallback(() => {
     const seed = (Math.floor(Math.random() * 0xffffffff) >>> 0) || 1;
     stateRef.current = createGame(seed);
     inputsRef.current = [];
     pendingRef.current = { left: false, right: false, jump: false, roll: false };
-    prevRef.current = { jumpY: 0, nearMisses: 0, bearGap: START_BEAR_GAP, pu: { magnet: 0, mult: 0, shield: false } };
+    prevRef.current = { jumpY: 0, nearMisses: 0, chaseGap: START_CHASE_GAP, pu: { magnet: 0, mult: 0, shield: false } };
     accRef.current = 0;
     lastRef.current = performance.now();
     startTimeRef.current = lastRef.current;
@@ -289,7 +313,7 @@ export default function Game3D({
           {hud.shield && "🛡️"}
           {hud.magnet && "🧲"}
           {hud.mult && "✖️2"}
-          {"🐻".repeat(Math.max(0, hud.gap))}
+          {"🐂".repeat(Math.max(0, hud.gap))}
         </span>
         <span className="text-zinc-400">Best {hi}</span>
       </div>
@@ -310,23 +334,50 @@ export default function Game3D({
             ) : phase === "ready" ? (
               <>
                 <h2 className="text-3xl font-extrabold">
-                  Sol<span className="gradient-text">Bulls</span> Runner
+                  Are you faster than the <span className="gradient-text">Bull</span>? 🐂
                 </h2>
                 <p className="text-zinc-300 text-sm max-w-xs">
-                  Outrun the bear! Swipe to change lanes, swipe up / tap to
-                  jump rocks, swipe down to roll under gantries. Dodge trains,
-                  grab coins & powerups.
+                  The Bull is charging behind you. Swipe to change lanes,
+                  swipe up / tap to jump, swipe down to roll under gantries.
+                  Dodge trains, grab coins & powerups.
                 </p>
+                <div className="flex flex-col items-center gap-2">
+                  <span className="text-xs uppercase tracking-widest text-zinc-400">
+                    Choose your runner
+                  </span>
+                  <div className="flex gap-3">
+                    {AVATARS.map((a) => (
+                      <button
+                        key={a.id}
+                        onClick={() => pickAvatar(a.id)}
+                        aria-label={`Avatar ${a.name}`}
+                        className={`flex flex-col items-center gap-1 rounded-xl px-2 py-2 border ${
+                          avatarId === a.id
+                            ? "border-bull-pink bg-ink-soft"
+                            : "border-ink-line opacity-70"
+                        }`}
+                      >
+                        <span
+                          className="w-8 h-8 rounded-md"
+                          style={{
+                            background: `linear-gradient(180deg, ${a.swatch[0]} 55%, ${a.swatch[1]} 45%)`,
+                          }}
+                        />
+                        <span className="text-[10px] text-zinc-300">{a.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <button
                   onClick={start}
                   className="gradient-bg text-ink font-bold rounded-full px-8 py-3 text-lg"
                 >
-                  Play
+                  Run!
                 </button>
               </>
             ) : (
               <>
-                <h2 className="text-3xl font-extrabold">Caught! 🐻</h2>
+                <h2 className="text-3xl font-extrabold">The Bull got you! 🐂</h2>
                 <p className="text-zinc-200">
                   Score <span className="gradient-text font-bold">{hud.score}</span> · 🐂{" "}
                   {hud.coins} coins

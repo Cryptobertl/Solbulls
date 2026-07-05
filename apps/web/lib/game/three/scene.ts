@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import type { GameState } from "../engine";
 import { TICK_HZ } from "../engine";
-import { BullActor, BearActor } from "./actors";
+import { PlayerActor, BullChaserActor } from "./actors";
 import { EntityLayer, SPAWN_DIST } from "./entities";
 import { Shake, Popups } from "./fx";
 import { themeAt, mixColor, type ThemeMix } from "./themes";
@@ -11,7 +11,7 @@ import {
   roadTexture,
   starsTexture,
 } from "./textures";
-import { buildCharacter, loadVoxels, BULL_TINT } from "./voxel";
+import { buildBull, buildHuman, loadVoxels, AVATARS, type VoxelData } from "./voxel";
 
 /** frame events computed by the component from engine-state diffs */
 export interface FrameEvents {
@@ -35,14 +35,15 @@ export class SceneManager {
   private buildingMat!: THREE.MeshLambertMaterial;
   private stars!: THREE.Mesh;
   private starsMat!: THREE.MeshBasicMaterial;
-  private bullShadow!: THREE.Mesh;
-  private bearShadow!: THREE.Mesh;
+  private playerShadow!: THREE.Mesh;
+  private chaserShadow!: THREE.Mesh;
   entityLayer = new EntityLayer();
   shake = new Shake();
   popups = new Popups();
-  bull: BullActor | null = null;
-  bear: BearActor | null = null;
+  player: PlayerActor | null = null;
+  chaser: BullChaserActor | null = null;
   ready: Promise<void>;
+  private voxelData: VoxelData | null = null;
 
   private lastThemeIndex = -1;
   private frameTimes: number[] = [];
@@ -51,7 +52,7 @@ export class SceneManager {
   private shakeOut = new THREE.Vector3();
   private disposed = false;
 
-  constructor(private canvas: HTMLCanvasElement) {
+  constructor(private canvas: HTMLCanvasElement, avatarId?: string) {
     this.renderer = new THREE.WebGLRenderer({
       canvas,
       antialias: false,
@@ -72,11 +73,13 @@ export class SceneManager {
 
     this.ready = loadVoxels().then((data) => {
       if (this.disposed) return;
-      const bull = buildCharacter(data, "bull", BULL_TINT);
-      const bear = buildCharacter(data, "bear");
-      this.bull = new BullActor(bull);
-      this.bear = new BearActor(bear);
-      this.scene.add(bull.group, bear.group);
+      this.voxelData = data;
+      const avatar = AVATARS.find((a) => a.id === avatarId) ?? AVATARS[0];
+      const human = buildHuman(data, avatar.tint);
+      const bull = buildBull(data);
+      this.player = new PlayerActor(human);
+      this.chaser = new BullChaserActor(bull);
+      this.scene.add(human.group, bull.group);
     });
   }
 
@@ -138,8 +141,28 @@ export class SceneManager {
       this.scene.add(m);
       return m;
     };
-    this.bullShadow = mkShadow();
-    this.bearShadow = mkShadow();
+    this.playerShadow = mkShadow();
+    this.chaserShadow = mkShadow();
+  }
+
+  /** swap the player's avatar tint (rebuilds only the human meshes) */
+  setAvatar(avatarId: string) {
+    const data = this.voxelData;
+    if (!data || !this.player) return;
+    const avatar = AVATARS.find((a) => a.id === avatarId) ?? AVATARS[0];
+    const old = this.player.c.group;
+    this.scene.remove(old);
+    old.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (mesh.geometry && (mesh as THREE.InstancedMesh).isInstancedMesh) {
+        (mesh.material as THREE.Material).dispose();
+      }
+    });
+    const human = buildHuman(data, avatar.tint);
+    const keepX = this.player.x;
+    this.player = new PlayerActor(human);
+    this.player.x = keepX;
+    this.scene.add(human.group);
   }
 
   private applyDpr() {
@@ -202,19 +225,19 @@ export class SceneManager {
     }
 
     // actors
-    if (this.bull) {
-      this.bull.update(s, jumpY, dt);
-      this.bullShadow.position.x = this.bull.x;
-      this.bullShadow.position.z = 0;
+    if (this.player) {
+      this.player.update(s, jumpY, dt);
+      this.playerShadow.position.x = this.player.x;
+      this.playerShadow.position.z = 0;
       const sc = 1 + jumpY * 0.9;
-      this.bullShadow.scale.setScalar(sc);
-      (this.bullShadow.material as THREE.MeshBasicMaterial).opacity =
+      this.playerShadow.scale.setScalar(sc);
+      (this.playerShadow.material as THREE.MeshBasicMaterial).opacity =
         0.9 - jumpY * 1.2;
     }
-    if (this.bear && this.bull) {
-      this.bear.update(s, this.bull.x, dt);
-      this.bearShadow.position.x = this.bear.c.group.position.x;
-      this.bearShadow.position.z = this.bear.c.group.position.z;
+    if (this.chaser && this.player) {
+      this.chaser.update(s, this.player.x, dt);
+      this.chaserShadow.position.x = this.chaser.c.group.position.x;
+      this.chaserShadow.position.z = this.chaser.c.group.position.z;
     }
 
     // entities
@@ -222,22 +245,22 @@ export class SceneManager {
 
     // fx
     if (events.hit) this.shake.trigger(0.3);
-    if (events.nearMiss && this.bull) {
+    if (events.nearMiss && this.player) {
       this.popups.spawn(
         "+25",
         "#4dffb8",
-        new THREE.Vector3(this.bull.x, 2.2, -1.5),
+        new THREE.Vector3(this.player.x, 2.2, -1.5),
       );
     }
-    if (events.powerup && this.bull) {
+    if (events.powerup && this.player) {
       const label =
         events.powerup === "magnet" ? "MAGNET!" : events.powerup === "mult" ? "2x!" : "SHIELD!";
-      this.popups.spawn(label, "#ff6ec7", new THREE.Vector3(this.bull.x, 2.6, -1.5));
+      this.popups.spawn(label, "#ff6ec7", new THREE.Vector3(this.player.x, 2.6, -1.5));
     }
     this.popups.update(dt);
 
     // camera
-    const bx = this.bull?.x ?? 0;
+    const bx = this.player?.x ?? 0;
     this.shake.update(dt, this.shakeOut);
     this.camera.position.set(bx * 0.45 + this.shakeOut.x, 3.4 + this.shakeOut.y, 6.2);
     this.camera.lookAt(bx * 0.8, 1.1, -10);

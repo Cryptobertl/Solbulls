@@ -124,8 +124,30 @@ function rock() {
   return g;
 }
 
+// ---- 2D runner (the player): small pixel man ----
+function runner() {
+  const g = new Layer();
+  const SKIN = hex("#e8b48c"), SHIRT = hex("#ff6ec7"), PANTS = hex("#23232e");
+  const HAIR = hex("#2b2118"), SHOE = hex("#f4f4fb"), D = hex("#14141c");
+  // head
+  g.rect(38, 14, 62, 36, SKIN);
+  g.rect(38, 10, 62, 20, HAIR);
+  g.rect(42, 24, 46, 28, D); g.rect(54, 24, 58, 28, D); // eyes
+  // torso
+  g.rect(36, 38, 64, 62, SHIRT);
+  g.rect(48, 40, 52, 60, hex("#f4f4fb")); // zip
+  // arms
+  g.rect(28, 40, 34, 58, SHIRT); g.rect(66, 40, 72, 58, SHIRT);
+  g.rect(28, 58, 34, 62, SKIN); g.rect(66, 58, 72, 62, SKIN);
+  // legs
+  g.rect(40, 64, 48, 84, PANTS); g.rect(52, 64, 60, 84, PANTS);
+  g.rect(40, 84, 48, 90, SHOE); g.rect(52, 84, 60, 90, SHOE);
+  return g;
+}
+
 async function main() {
   await bull();
+  await saveLayer(runner(), "runner");
   await saveLayer(bear(), "bear");
   await saveLayer(coin(), "coin");
   await saveLayer(barrier(), "barrier");
